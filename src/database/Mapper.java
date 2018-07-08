@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +16,19 @@ import java.sql.SQLException;
 
 public class Mapper {
 	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
 	public @interface PrimaryKey {}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
 	public @interface ForeignKey {
 		String references();
 		String on() default "";
 	}
+	
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
 	public @interface StringSize {
 		boolean fixed() default false;
 		int size() default -1;
@@ -35,6 +46,7 @@ public class Mapper {
 	
 	/**
 	 * Interface que permite compatibilidade com funcoes de mapeamento
+	 * Classes que implementem essa interface devem garantir que a interface tenha acesso a seus campos, ou seja, todos os campos devem ter no maximo acesso default, caso estejam no package database, e public caso contrario
 	 */
 	public static interface Managed {
 		/**
@@ -71,7 +83,7 @@ public class Mapper {
 	 * Mapeia o tipo de um campo de uma classe para um tipo em SQL
 	 * @param field: Campo a ser mapeado
 	 * @return: String representando tipo equivalente em SQL
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException se compo nao pode ser mapeado
 	 */
 	private static String mapToSqlType (Field field) throws IllegalArgumentException {
 		String className = field.getType().getSimpleName();
@@ -149,7 +161,7 @@ public class Mapper {
 	/**
 	 * Gera prepared statement de acordo com os filtros
 	 * @param query: string de query ja construida
-	 * @param parameters: array com parametros ordenados
+	 * @param parameters: lista com parametros ordenados
 	 * @return
 	 */
 	private PreparedStatement generateQuery (String query, List<Object> parameters) throws SQLException {
@@ -158,7 +170,7 @@ public class Mapper {
 		
 		Iterator<Object> it = parameters.iterator();
 		while (it.hasNext()) {
-			statement.setObject(i++, it.next());
+			statement.setObject(++i, it.next());
 		}
 		
 		return statement;
@@ -182,7 +194,7 @@ public class Mapper {
 		}
 		
 		query.append("CREATE TABLE ");
-		query.append(table.getName());
+		query.append(table.getSimpleName());
 		query.append(" (\n");
 		
 		primaryKeys.append("PRIMARY KEY(");
@@ -234,27 +246,19 @@ public class Mapper {
 	public void create(Mapper.Managed object) throws IllegalArgumentException, SQLException {
 		StringBuilder query;
 		Class<?> objClass = object.getClass();
-		List<String> tables = object.getTableDependancies();
 		Field[] fields = objClass.getDeclaredFields();
 		ArrayList<Object> values = new ArrayList<Object>(fields.length);
-		String table;
 		
 		//check consistency
-		if (tables.size() == 0) {
-			throw new IllegalArgumentException("manager has specified no table dependancies");
-		} else if (tables.size() != 1) {
-			throw new IllegalArgumentException("manager has specified multiple table dependancies and insertion can only be done on one table at a time");
-		}
 		if (fields.length == 0) {
 			throw new IllegalArgumentException("object has no attributes");
 		}
 		
-		table = tables.get(0);
 		try {
 			query = new StringBuilder();
 			
-			query.append("INSERT INTO TABLE ");
-			query.append(table);
+			query.append("INSERT INTO ");
+			query.append(objClass.getSimpleName());
 			query.append(" VALUES (");
 			
 			query.append('?');
