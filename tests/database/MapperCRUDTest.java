@@ -5,42 +5,50 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
+import org.dbunit.Assertion;
 import org.junit.*;
 import org.junit.jupiter.api.Assertions;
 
+import database.Mapper.Filter;
+
 public class MapperCRUDTest {
 	
-	private static class TestTableCreationForeign implements Mapper.Managed {
+	@Mapper.UseTables({TestTableForeign.TNAME})
+	private static class TestTableForeign {
+		
+		public static final String TNAME = "TEST_TABLE_FOREIGN";
+		
 		
 		@Mapper.PrimaryKey
 		int tableCreationForeignId;
 		
-		public TestTableCreationForeign() {}
+		int value;
 		
-		public TestTableCreationForeign(int id) {
+		public TestTableForeign() {}
+		
+		public TestTableForeign(int id, int value) {
 			this.tableCreationForeignId = id;
+			this.value = value;
 		}
 		
 		public int getTableCreationForeignId() {
-			return tableCreationForeignId;
-		}
-
-		@Override
-		public List<String> getTableDependancies () {
-			ArrayList<String> tables = new ArrayList<String>(1);
-			tables.add(TestTableCreationForeign.class.getSimpleName());
-			return tables;
+			return this.tableCreationForeignId;
 		}
 		
-		@Override
-		public Object newInstance () {
-			return new TestTableCreationForeign();
+		public int getValue () {
+			return this.value;
 		}
 	}
 
-	private static class TestTableCreation implements Mapper.Managed {
+	@Mapper.UseTables({TestTable.TNAME})
+	private static class TestTable {
+		
+		public static final String TNAME = "TEST_TABLE";
+		
 		
 		@Mapper.PrimaryKey
 		int tableCreationid1;
@@ -55,12 +63,12 @@ public class MapperCRUDTest {
 		
 		String tableCreationUndefStr;
 		
-		@Mapper.ForeignKey(references="TestTableCreationForeign")
+		@Mapper.ForeignKey(references=TestTableForeign.TNAME)
 		int tableCreationForeignId;
 		
-		private TestTableCreation() {}
+		private TestTable() {}
 		
-		public TestTableCreation (int tableCreationid1, short tableCreationid2, String tableCreationFixedStr, String tableCreationVariableStr, String tableCreationUndefStr, int tableCreationForeignId) {
+		public TestTable (int tableCreationid1, short tableCreationid2, String tableCreationFixedStr, String tableCreationVariableStr, String tableCreationUndefStr, int tableCreationForeignId) {
 			this.tableCreationid1 = tableCreationid1;
 			this.tableCreationid2 = tableCreationid2;
 			this.tableCreationFixedStr = tableCreationFixedStr;
@@ -69,42 +77,29 @@ public class MapperCRUDTest {
 			this.tableCreationForeignId = tableCreationForeignId;
 		}
 		
+	}
+	
+	
+	@Mapper.UseTables({TestTable.TNAME, TestTableForeign.TNAME})
+	private static class TestTableDetailed {
 		
-		public int getTableCreationid1() {
-			return tableCreationid1;
-		}
-
-		public short getTableCreationid2() {
-			return tableCreationid2;
-		}
-
-		public String getTableCreationFixedStr() {
-			return tableCreationFixedStr;
-		}
-
-		public String getTableCreationVariableStr() {
-			return tableCreationVariableStr;
-		}
-
-		public String getTableCreationUndefStr() {
-			return tableCreationUndefStr;
-		}
-
-		public int getTableCreationForeignId() {
-			return tableCreationForeignId;
-		}
-
-		@Override
-		public List<String> getTableDependancies () {
-			ArrayList<String> tables = new ArrayList<String>(1);
-			tables.add(TestTableCreation.class.getSimpleName());
-			return tables;
-		}
 		
-		@Override
-		public Object newInstance () {
-			return new TestTableCreation();
-		}
+		int tableCreationid1;
+		
+		short tableCreationid2;
+		
+		String tableCreationFixedStr;
+		
+		String tableCreationVariableStr;
+		
+		String tableCreationUndefStr;
+		
+		int tableCreationForeignId;
+		
+		int value;
+		
+		public TestTableDetailed () {}
+		
 	}
 	
 	@Test
@@ -115,16 +110,16 @@ public class MapperCRUDTest {
 			con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
 			
-			mapper.create(TestTableCreationForeign.class);
+			mapper.create(TestTableForeign.class);
 			created++;
 			
 			//caso tabela tanha sido criada incorretamente tentar acessar seus membros gerara uma excecao
-			con.createStatement().executeQuery("SELECT * FROM "+TestTableCreationForeign.class.getSimpleName()+" WHERE tableCreationForeignId = 0");
+			con.createStatement().executeQuery("SELECT * FROM "+TestTableForeign.TNAME+" WHERE tableCreationForeignId = 0 AND value = 0");
 			
-			mapper.create(TestTableCreation.class);
+			mapper.create(TestTable.class);
 			created++;
 			
-			con.createStatement().executeQuery("SELECT * FROM "+TestTableCreation.class.getSimpleName()+" WHERE tableCreationId1 = 0 AND\n"
+			con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME+" WHERE tableCreationId1 = 0 AND\n"
 																											+ "tableCreationid2 = 0 AND\n"
 																											+ "tableCreationFixedStr = 'test' AND\n"
 																											+ "tableCreationVariableStr = 'test' AND\n"
@@ -133,14 +128,14 @@ public class MapperCRUDTest {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Assert.fail();
+			Assert.fail(e.getMessage());
 		} finally {
 			try {
 				switch (created) {
 					case 2:
-						con.createStatement().executeUpdate("DROP TABLE "+TestTableCreation.class.getSimpleName());
+						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
 					case 1:
-						con.createStatement().executeUpdate("DROP TABLE "+TestTableCreationForeign.class.getSimpleName());
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -157,10 +152,11 @@ public class MapperCRUDTest {
 			Mapper mapper = new Mapper(con);
 			
 			//criar tableas
-			con.createStatement().executeUpdate("CREATE TABLE "+TestTableCreationForeign.class.getSimpleName()+" ( tableCreationForeignId INTEGER,\n"
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
+																												+"\tvalue INTEGER,\n"
 																												+"\tPRIMARY KEY (tableCreationForeignId)\n)");
 			created++;
-			con.createStatement().executeUpdate("CREATE TABLE "+TestTableCreation.class.getSimpleName()+" ("
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
 																										+"\n\t tableCreationid1 INTEGER"
 																										+",\n\t tableCreationid2 SMALLINT"
 																										+",\n\t tableCreationFixedStr CHAR(10)"
@@ -168,15 +164,15 @@ public class MapperCRUDTest {
 																										+",\n\t tableCreationUndefStr VARCHAR"
 																										+",\n\t tableCreationForeignId INT"
 																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
-																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableCreationForeign.class.getSimpleName()+"(tableCreationForeignId)\n)");
+																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
 			created++;
 			
 			//gerar dados
-			TestTableCreationForeign tf1 = new TestTableCreationForeign(0);
-			TestTableCreation tc1 = new TestTableCreation(1, (short)2, "test", "test2", "test3", 0);
-			TestTableCreation tc2 = new TestTableCreation(2, (short)1, "test", "test2", "test6", 0);
-			ArrayList<TestTableCreation> objs = new ArrayList<TestTableCreation>(2);
-			Iterator<TestTableCreation> it;
+			TestTableForeign tf1 = new TestTableForeign(0, 2);
+			TestTable tc1 = new TestTable(1, (short)2, "test", "test2", "test3", 0);
+			TestTable tc2 = new TestTable(2, (short)1, "test", "test2", "test6", 0);
+			ArrayList<TestTable> objs = new ArrayList<TestTable>(2);
+			Iterator<TestTable> it;
 			objs.add(tc1);
 			objs.add(tc2);
 			
@@ -184,19 +180,19 @@ public class MapperCRUDTest {
 			mapper.create(tc1);
 			mapper.create(tc2);
 			
-			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTableCreation.class.getSimpleName()+" WHERE tableCreationVariableStr = 'test2' ORDER BY 1 ASC");
+			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME+" WHERE tableCreationVariableStr = 'test2' ORDER BY 1 ASC");
 			
 			//verificar retorno dos dados
 			rs.next();
 			it = objs.iterator();
 			while (!rs.isAfterLast() && it.hasNext()) {
-				TestTableCreation tc = it.next();
-				Assertions.assertEquals(tc.getTableCreationid1(), rs.getInt(1));
-				Assertions.assertEquals(tc.getTableCreationid2(), rs.getShort(2));
-				Assertions.assertEquals(tc.getTableCreationFixedStr(), rs.getString(3).trim());
-				Assertions.assertEquals(tc.getTableCreationVariableStr(), rs.getString(4));
-				Assertions.assertEquals(tc.getTableCreationUndefStr(), rs.getString(5));
-				Assertions.assertEquals(tc.getTableCreationForeignId(), rs.getInt(6));
+				TestTable tc = it.next();
+				Assertions.assertEquals(tc.tableCreationid1, rs.getInt(1));
+				Assertions.assertEquals(tc.tableCreationid2, rs.getShort(2));
+				Assertions.assertEquals(tc.tableCreationFixedStr, rs.getString(3).trim());
+				Assertions.assertEquals(tc.tableCreationVariableStr, rs.getString(4));
+				Assertions.assertEquals(tc.tableCreationUndefStr, rs.getString(5));
+				Assertions.assertEquals(tc.tableCreationForeignId, rs.getObject(6));
 				rs.next();
 			}
 			
@@ -206,14 +202,246 @@ public class MapperCRUDTest {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Assert.fail();
+			Assert.fail(e.getMessage());
 		} finally {
 			try {
 				switch (created) {
 					case 2:
-						con.createStatement().executeUpdate("DROP TABLE "+TestTableCreation.class.getSimpleName());
+						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
 					case 1:
-						con.createStatement().executeUpdate("DROP TABLE "+TestTableCreationForeign.class.getSimpleName());
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Test
+	public void read () {
+		Connection con = null;
+		int created = 0;
+		try {
+			con = DbConnection.connect();
+			Mapper mapper = new Mapper(con);
+			List<TestTableDetailed> queryResult;
+
+			//criar tableas
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
+																												+"\tvalue INTEGER,\n"
+																												+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+			created++;
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
+																										+"\n\t tableCreationid1 INTEGER"
+																										+",\n\t tableCreationid2 SMALLINT"
+																										+",\n\t tableCreationFixedStr CHAR(10)"
+																										+",\n\t tableCreationVariableStr VARCHAR(15)"
+																										+",\n\t tableCreationUndefStr VARCHAR"
+																										+",\n\t tableCreationForeignId INT"
+																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
+																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+			created++;
+			
+			//inserir dados na tabela
+			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', 0)");
+			
+			queryResult = mapper.read(-1, TestTableDetailed.class, new Filter("tableCreationid1", ">", 0), new Filter("tableCreationVariableStr", "=", "test2"));
+			//queryResult = mapper.read(0, TestTableDetailed.class);
+			if (queryResult.isEmpty()) {
+				Assert.fail("Query did not return any results");
+			} else {
+				queryResult.sort((o1, o2) -> ((TestTableDetailed)o1).tableCreationid1-((TestTableDetailed)o2).tableCreationid2);
+				Iterator<TestTableDetailed> it = queryResult.iterator();
+				TestTableDetailed row;
+				
+				row = it.next();
+				Assertions.assertEquals(1, row.tableCreationid1);
+				Assertions.assertEquals(2, row.tableCreationid2);
+				Assertions.assertEquals("test", row.tableCreationFixedStr.trim());
+				Assertions.assertEquals("test2", row.tableCreationVariableStr);
+				Assertions.assertEquals("test3", row.tableCreationUndefStr);
+				Assertions.assertEquals(0, row.tableCreationForeignId);
+				Assertions.assertEquals(50, row.value);
+				
+				row = it.next();
+				Assertions.assertEquals(4, row.tableCreationid1);
+				Assertions.assertEquals(2, row.tableCreationid2);
+				Assertions.assertEquals("test4", row.tableCreationFixedStr.trim());
+				Assertions.assertEquals("test2", row.tableCreationVariableStr);
+				Assertions.assertEquals("test5", row.tableCreationUndefStr);
+				Assertions.assertEquals(0, row.tableCreationForeignId);
+				Assertions.assertEquals(50, row.value);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} finally {
+			try {
+				switch (created) {
+					case 2:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
+					case 1:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Test
+	public void update () {
+		Connection con = null;
+		int created = 0;
+		try {
+			con = DbConnection.connect();
+			Mapper mapper = new Mapper(con);
+			
+			//criar tabela
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
+																						+"\tvalue INTEGER,\n"
+																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+			created++;
+			
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
+																				+"\n\t tableCreationid1 INTEGER"
+																				+",\n\t tableCreationid2 SMALLINT"
+																				+",\n\t tableCreationFixedStr CHAR(10)"
+																				+",\n\t tableCreationVariableStr VARCHAR(15)"
+																				+",\n\t tableCreationUndefStr VARCHAR"
+																				+",\n\t tableCreationForeignId INT"
+																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
+																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+			created++;
+			
+			//inserir dados na tabela
+			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
+			
+			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", 0);
+			
+			mapper.update(tst);
+			
+			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
+			
+			rs.next();
+			Assertions.assertEquals(tst.tableCreationid1, rs.getInt(1));
+			Assertions.assertEquals(tst.tableCreationid2, rs.getShort(2));
+			Assertions.assertEquals(tst.tableCreationFixedStr, rs.getString(3).trim());
+			Assertions.assertEquals(tst.tableCreationVariableStr, rs.getString(4));
+			Assertions.assertEquals(tst.tableCreationUndefStr, rs.getString(5));
+			Assertions.assertEquals(tst.tableCreationForeignId, rs.getObject(6));
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} finally {
+			try {
+				switch (created) {
+					case 2:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
+					case 1:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
+
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Test
+	public void delete () {
+		Connection con = null;
+		int created = 0;
+		try {
+			con = DbConnection.connect();
+			Mapper mapper = new Mapper(con);
+			
+			//criar tabela
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
+																						+"\tvalue INTEGER,\n"
+																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+			created++;
+			
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
+																				+"\n\t tableCreationid1 INTEGER"
+																				+",\n\t tableCreationid2 SMALLINT"
+																				+",\n\t tableCreationFixedStr CHAR(10)"
+																				+",\n\t tableCreationVariableStr VARCHAR(15)"
+																				+",\n\t tableCreationUndefStr VARCHAR"
+																				+",\n\t tableCreationForeignId INT"
+																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
+																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+			created++;
+			
+			//inserir dados na tabela
+			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', 0)");
+			
+			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", 0);
+			
+			mapper.delete(tst);
+			
+			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
+			
+			rs.next();
+			rs.next();
+			if (!rs.isAfterLast()) {
+				Assert.fail("Row was not deleted from table");
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} finally {
+			try {
+				switch (created) {
+					case 2:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
+					case 1:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
+
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Test
+	public void drop () {
+		int created = 0;
+		Connection con = null;
+		try {
+			con = DbConnection.connect();
+			Mapper mapper = new Mapper(con);
+			
+			//criar tabela
+			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
+																						+"\tvalue INTEGER,\n"
+																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+			created++;
+			
+			mapper.delete(TestTableForeign.class);
+			created--;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		} finally {
+			try {
+				switch (created) {
+					case 1:
+						con.createStatement().executeUpdate("DROP TABLE "+TestTableForeign.TNAME);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
