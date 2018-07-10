@@ -11,7 +11,8 @@ import java.util.Iterator;
 
 import org.dbunit.Assertion;
 import org.junit.*;
-import org.junit.jupiter.api.Assertions;
+//import org.junit.jupiter.api.Assert;
+
 
 import database.Mapper.Filter;
 
@@ -187,12 +188,12 @@ public class MapperCRUDTest {
 			it = objs.iterator();
 			while (!rs.isAfterLast() && it.hasNext()) {
 				TestTable tc = it.next();
-				Assertions.assertEquals(tc.tableCreationid1, rs.getInt(1));
-				Assertions.assertEquals(tc.tableCreationid2, rs.getShort(2));
-				Assertions.assertEquals(tc.tableCreationFixedStr, rs.getString(3).trim());
-				Assertions.assertEquals(tc.tableCreationVariableStr, rs.getString(4));
-				Assertions.assertEquals(tc.tableCreationUndefStr, rs.getString(5));
-				Assertions.assertEquals(tc.tableCreationForeignId, rs.getObject(6));
+				Assert.assertEquals(tc.tableCreationid1, rs.getInt(1));
+				Assert.assertEquals(tc.tableCreationid2, rs.getShort(2));
+				Assert.assertEquals(tc.tableCreationFixedStr, rs.getString(3).trim());
+				Assert.assertEquals(tc.tableCreationVariableStr, rs.getString(4));
+				Assert.assertEquals(tc.tableCreationUndefStr, rs.getString(5));
+				Assert.assertEquals(tc.tableCreationForeignId, rs.getObject(6));
 				rs.next();
 			}
 			
@@ -257,22 +258,22 @@ public class MapperCRUDTest {
 				TestTableDetailed row;
 				
 				row = it.next();
-				Assertions.assertEquals(1, row.tableCreationid1);
-				Assertions.assertEquals(2, row.tableCreationid2);
-				Assertions.assertEquals("test", row.tableCreationFixedStr.trim());
-				Assertions.assertEquals("test2", row.tableCreationVariableStr);
-				Assertions.assertEquals("test3", row.tableCreationUndefStr);
-				Assertions.assertEquals(0, row.tableCreationForeignId);
-				Assertions.assertEquals(50, row.value);
+				Assert.assertEquals(1, row.tableCreationid1);
+				Assert.assertEquals(2, row.tableCreationid2);
+				Assert.assertEquals("test", row.tableCreationFixedStr.trim());
+				Assert.assertEquals("test2", row.tableCreationVariableStr);
+				Assert.assertEquals("test3", row.tableCreationUndefStr);
+				Assert.assertEquals(0, row.tableCreationForeignId);
+				Assert.assertEquals(50, row.value);
 				
 				row = it.next();
-				Assertions.assertEquals(4, row.tableCreationid1);
-				Assertions.assertEquals(2, row.tableCreationid2);
-				Assertions.assertEquals("test4", row.tableCreationFixedStr.trim());
-				Assertions.assertEquals("test2", row.tableCreationVariableStr);
-				Assertions.assertEquals("test5", row.tableCreationUndefStr);
-				Assertions.assertEquals(0, row.tableCreationForeignId);
-				Assertions.assertEquals(50, row.value);
+				Assert.assertEquals(4, row.tableCreationid1);
+				Assert.assertEquals(2, row.tableCreationid2);
+				Assert.assertEquals("test4", row.tableCreationFixedStr.trim());
+				Assert.assertEquals("test2", row.tableCreationVariableStr);
+				Assert.assertEquals("test5", row.tableCreationUndefStr);
+				Assert.assertEquals(0, row.tableCreationForeignId);
+				Assert.assertEquals(50, row.value);
 				
 			}
 			
@@ -330,12 +331,12 @@ public class MapperCRUDTest {
 			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
 			
 			rs.next();
-			Assertions.assertEquals(tst.tableCreationid1, rs.getInt(1));
-			Assertions.assertEquals(tst.tableCreationid2, rs.getShort(2));
-			Assertions.assertEquals(tst.tableCreationFixedStr, rs.getString(3).trim());
-			Assertions.assertEquals(tst.tableCreationVariableStr, rs.getString(4));
-			Assertions.assertEquals(tst.tableCreationUndefStr, rs.getString(5));
-			Assertions.assertEquals(tst.tableCreationForeignId, rs.getObject(6));
+			Assert.assertEquals(tst.tableCreationid1, rs.getInt(1));
+			Assert.assertEquals(tst.tableCreationid2, rs.getShort(2));
+			Assert.assertEquals(tst.tableCreationFixedStr, rs.getString(3).trim());
+			Assert.assertEquals(tst.tableCreationVariableStr, rs.getString(4));
+			Assert.assertEquals(tst.tableCreationUndefStr, rs.getString(5));
+			Assert.assertEquals(tst.tableCreationForeignId, rs.getObject(6));
 			
 			
 		} catch (SQLException e) {
