@@ -18,6 +18,7 @@
   Sigla <input type="text" name="siglaAssoc"><br>
   Endereço <input type="text" name="enderecoAssoc"><br>
   Telefone <input type="text" name="telAssoc"><br>
+  Número do comprovante de pagamento <input type="text" name="numComprovantePag"><br>
   <input type="submit" value="Confirmar">
 </form>
 </body>
