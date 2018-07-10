@@ -22,7 +22,6 @@
 	<a href=""> Inscrever atleta em competição</a><br>
 	<a href=""> Identificar usuário</a><br>
 	<a href=""> Incluir locais de competição</a><br>
-	<a href=""> Incluir locais de competição</a><br>
 	<a href=""> Alterar locais de competição</a><br>
 	<a href=""> Listar locais de competição</a><br>
 	<a href=""> Criar competição</a><br>

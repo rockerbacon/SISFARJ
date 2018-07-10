@@ -9,13 +9,9 @@
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark">
-   <a class="navbar-brand" href="#">SISFARJ</a>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
-     <span class="navbar-toggler-icon"></span>
-   </button>
-   
- </nav>
-<div class="container">	
+   <a class="navbar-brand" href="#">SISFARJ</a>      
+</nav>
+<div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Cadastrar atleta</h4>
 	<form>
 		<div class="form-group">
@@ -46,8 +42,6 @@
 			<label for="exampleInputEmail1">Comprovante</label>
 			<input type="text" class="form-control" name="comprovante" id="comprovante" placeholder="Comprovante">
 		</div>
-
-
 
 		<button type="submit" class="btn btn-primary">Enviar</button>
 	</form>

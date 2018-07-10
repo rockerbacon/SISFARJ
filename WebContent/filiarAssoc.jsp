@@ -3,23 +3,52 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="home.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login do usuário</title>
+<title>SISFARJ - Filiar associação</title>
 </head>
 <body>
-<div class="topbar"> 
-	SISFARJ - Filiar associação
+<nav class="navbar navbar-dark bg-dark">
+   <a class="navbar-brand" href="#">SISFARJ</a>      
+</nav>
+<div class="container" style="margin-top: 30px;">	
+	<h4 class="mb-3">SISFARJ - Filiar associação</h4>
+	<form>
+		<div class="form-group">
+			<label for="nOficio">Número de ofício</label>
+			<input type="text" class="form-control" name="nOficio" id="nOficio" placeholder="Número de ofício">
+		</div>	
+		<div class="form-group">
+			<label for="Data">Data Ofício</label>
+			<input type="date" class="form-control" name="dataOficio" id="dataOficio" placeholder="Data Ofício">
+		</div>	
+		<div class="form-group">
+			<label for="nomeAssoc">Nome</label>
+			<input type="text" class="form-control" name="nomeAssoc" id="nomeAssoc" placeholder="Nome">
+		</div>
+		<div class="form-group">
+			<label for="siglaAssoc">Sigla</label>
+			<input type="text" class="form-control" name="siglaAssoc" id="siglaAssoc" placeholder="Sigla">
+		</div>
+		<div class="form-group">
+			<label for="enderecoAssoc">Endereço</label>
+			<input type="text" class="form-control" name="enderecoAssoc" id="enderecoAssoc" placeholder="Endereço">
+		</div>
+		<div class="form-group">
+			<label for="telAssoc">Telefone</label>
+			<input type="text" class="form-control" name="telAssoc" id="telAssoc" placeholder="Telefone">
+		</div>
+		<div class="form-group">
+			<label for="numComprovantePag">Número do comprovante de pagamento</label>
+			<input type="text" class="form-control" name="numComprovantePag" id="numComprovantePag" placeholder="Número do comprovante de pagamento">
+		</div>
+
+		<button type="submit" value="Cadastrar" class="btn btn-primary">Cadastrar</button>
+	</form>
 </div>
-<form>
-  Número de ofício <input type="text" name="nOficio"><br>
-  Data <input type="date" name="dataOficio"><br>
-  Nome <input type="text" name="nomeAssoc"><br>
-  Sigla <input type="text" name="siglaAssoc"><br>
-  Endereço <input type="text" name="enderecoAssoc"><br>
-  Telefone <input type="text" name="telAssoc"><br>
-  Número do comprovante de pagamento <input type="text" name="numComprovantePag"><br>
-  <input type="submit" value="Confirmar">
-</form>
+
+<script src="js/jquery-3.2.1.slim.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>
