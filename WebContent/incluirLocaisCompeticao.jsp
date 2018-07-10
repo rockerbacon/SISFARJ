@@ -11,14 +11,10 @@
 <div class="topbar"> 
 	SISFARJ - Cadastrar atleta
 </div>
-<form>
-  Número de ofício <input type="text" name="nOficio"><br>
-  Data Oficio <input type="date" name="dataOficio"><br>
-  Nome <input type="text" name="nomeAssoc"><br>
-  Data de nascimento <input type="date" name="dtNasc"><br>
-  Data de entrada <input type="date" name="dtEntrada"><br>
-  Matrícula <input type="text" name="matriculaAtleta"><br>
-  Comprovante <input type="text" name="comprovante"><br>
+<form>  
+  Nome <input type="text" name="nomeAssoc"><br>  
+  Endereço <input type="text" name="matriculaAtleta"><br>
+  Piscina <input type="text" name="comprovante"><br>
   <input type="submit" value="Cadastrar">
 </form>
 </body>
