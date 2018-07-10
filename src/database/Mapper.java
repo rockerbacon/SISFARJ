@@ -19,7 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Mapper {
+public class Mapper implements DbMapperManager {
 	
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
@@ -177,7 +177,7 @@ public class Mapper {
 	private static String[] getDeclaredTables (Class<?> c) throws IllegalArgumentException {
 		UseTables declTables = c.getDeclaredAnnotation(UseTables.class);
 		if (declTables == null || declTables.value().length == 0) {
-			throw new IllegalArgumentException("Class "+c.getName()+" has no declared tables");
+			throw new IllegalArgumentException("Class "+c.getCanonicalName()+" has no declared tables");
 		}
 		return declTables.value();
 	}
@@ -299,6 +299,7 @@ public class Mapper {
 	 * @throws SQLException
 	 * @throws IllegalArgumentException: Caso tabela nao possua campos ou algum dos campos nao possa ser mapeado
 	 */
+	@Override
 	public void create (Class<?> table) throws SQLException, IllegalArgumentException {
 		
 		StringBuilder query = new StringBuilder();
@@ -309,11 +310,11 @@ public class Mapper {
 		
 		//check consistency
 		if (fields.length == 0) {
-			throw new IllegalArgumentException("Class "+table.getName()+" has no fields");
+			throw new IllegalArgumentException("Class "+table.getCanonicalName()+" has no fields");
 		}
 		if (tables.length != 1) {
 			System.out.println(tables.length);
-			throw new IllegalArgumentException("Class "+table.getName()+" must only use one table to be created");
+			throw new IllegalArgumentException("Class "+table.getCanonicalName()+" must only use one table to be created");
 		}
 		
 		query.append("CREATE TABLE ");
@@ -368,6 +369,7 @@ public class Mapper {
 	 * @throws IllegalArgumentException: If the object's class was not correctly created
 	 * @throws SQLException
 	 */
+	@Override
 	public void create(Object object) throws IllegalArgumentException, SQLException {
 		StringBuilder query;
 		Class<?> objClass = object.getClass();
@@ -381,7 +383,7 @@ public class Mapper {
 			throw new IllegalArgumentException("object has no attributes");
 		}
 		if (tables.length != 1) {
-			throw new IllegalArgumentException("Object of Type "+objClass.getName()+" must only use one table to be inserted");
+			throw new IllegalArgumentException("Object of Type "+objClass.getCanonicalName()+" must only use one table to be inserted");
 		}
 		
 		try {
@@ -395,7 +397,7 @@ public class Mapper {
 			i = 0;
 			while (Modifier.isStatic(fields[i].getModifiers()) && i < fields.length) { i++; };
 			if (i == fields.length) {
-				throw new IllegalArgumentException("Class "+objClass.getName()+" only has static fields");
+				throw new IllegalArgumentException("Class "+objClass.getCanonicalName()+" only has static fields");
 			}
 			
 			query.append('?');
@@ -427,6 +429,7 @@ public class Mapper {
 	 * @param filter: Filtro obrigatorio
 	 * @param others: Filtros opcionais
 	 */
+	@Override
 	public <Type> List<Type> read(int maxRows, Class<Type> factory, Filter... filters) throws IllegalArgumentException, SQLException {
 		
 		Constructor<?> constructor;
@@ -447,7 +450,7 @@ public class Mapper {
 		i = 0;
 		while (Modifier.isStatic(fields[i].getModifiers()) && i < fields.length) { i++; };
 		if (i == fields.length) {
-			throw new IllegalArgumentException("Class "+factory.getName()+" only has static fields");
+			throw new IllegalArgumentException("Class "+factory.getCanonicalName()+" only has static fields");
 		}
 		
 		//preencher select da query
@@ -506,7 +509,7 @@ public class Mapper {
 		} catch (IllegalAccessException|InstantiationException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException|NoSuchMethodException e) {
-			throw new IllegalArgumentException("Class "+factory.getName()+" needs default constructor for query to be made");
+			throw new IllegalArgumentException("Class "+factory.getCanonicalName()+" needs default constructor for query to be made");
 		}
 		
 		return rows;
@@ -517,7 +520,8 @@ public class Mapper {
 	 * Objeto sera procurado na base de acordo com suas chaves primarias e entao seus valores serao modificados
 	 * @param object: objeto a ser atualizado com os valores a serem atualizados
 	 */
-	public void update (Object object) throws SQLException {
+	@Override
+	public void update (Object object) throws SQLException, IllegalArgumentException {
 		StringBuilder query = new StringBuilder();
 		Class<?> objClass = object.getClass();
 		Field[] fields = objClass.getDeclaredFields();
@@ -529,7 +533,7 @@ public class Mapper {
 		Field field;
 		
 		if (tables.length != 1) {
-			throw new IllegalArgumentException("Object of Type "+objClass.getName()+" must only use one table to be updated");	
+			throw new IllegalArgumentException("Object of Type "+objClass.getCanonicalName()+" must only use one table to be updated");	
 		}
 		
 		query.append("UPDATE ");
@@ -542,7 +546,7 @@ public class Mapper {
 			i = 0;
 			while (Modifier.isStatic(fields[i].getModifiers()) && i < fields.length) { i++; };
 			if (i == fields.length) {
-				throw new IllegalArgumentException("Class "+objClass.getName()+" only has static fields");
+				throw new IllegalArgumentException("Class "+objClass.getCanonicalName()+" only has static fields");
 			}
 		
 			query.append("\n\t");
@@ -579,7 +583,7 @@ public class Mapper {
 			this.generateQuery(query.toString(), params).executeUpdate();
 			
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new IllegalArgumentException("Not all fields in class "+objClass.getCanonicalName()+" are accessible by mapper");
 		}
 	}
 	
@@ -588,10 +592,11 @@ public class Mapper {
 	 * @param table: Classe que utiliza a tabela a ser dropada
 	 * @throws SQLException
 	 */
-	public void delete (Class<?> table) throws SQLException {
+	@Override
+	public void delete (Class<?> table) throws SQLException, IllegalArgumentException {
 		String[] tables = Mapper.getDeclaredTables(table);
 		if (tables.length != 1) {
-			throw new IllegalArgumentException("Class "+table.getName()+" must only use one table to be dropped");
+			throw new IllegalArgumentException("Class "+table.getCanonicalName()+" must only use one table to be dropped");
 		}
 		this.connection.prepareStatement("DROP TABLE "+tables[0]).executeUpdate();
 	}
@@ -599,7 +604,8 @@ public class Mapper {
 	 * Exclui objeto da base de dados
 	 * @param object: Objeto a ser excluido
 	 */
-	public void delete (Object object) throws SQLException {
+	@Override
+	public void delete (Object object) throws SQLException, IllegalArgumentException {
 		StringBuilder query = new StringBuilder();
 		Class<?> objClass = object.getClass();
 		Field[] fields = objClass.getDeclaredFields();
@@ -607,7 +613,7 @@ public class Mapper {
 		LinkedList<Object> params = new LinkedList<Object>();
 		
 		if (tables.length != 1) {
-			throw new IllegalArgumentException("Object of Type "+objClass.getName()+" must only use one table to be deleted");
+			throw new IllegalArgumentException("Object of Type "+objClass.getCanonicalName()+" must only use one table to be deleted");
 		}
 		
 		query.append("DELETE FROM ");
@@ -629,7 +635,7 @@ public class Mapper {
 			this.generateQuery(query.toString(), params).executeUpdate();
 			
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			throw new IllegalArgumentException("Not all fields in class "+objClass.getCanonicalName()+" are accessible by mapper");
 		}
 		
 	}

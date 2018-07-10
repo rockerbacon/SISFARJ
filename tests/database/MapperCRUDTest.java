@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.junit.*;
-<<<<<<< HEAD
-//import org.junit.jupiter.api.Assert;
-
-=======
->>>>>>> d0897013d50bb90f67f24af86956b52ac29a0e86
 
 import database.Mapper.Filter;
 
