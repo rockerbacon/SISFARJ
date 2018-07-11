@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import org.postgresql.Driver;
 
+@SuppressWarnings("unused")
 public class DbConnection {
 	public static final String user = "postgres";
 	public static final String password = "db123";
