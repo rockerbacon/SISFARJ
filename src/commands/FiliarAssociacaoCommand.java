@@ -1,6 +1,7 @@
 package commands;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,11 +28,12 @@ public class FiliarAssociacaoCommand implements Command {
 	
 	public FiliarAssociacaoCommand(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			
 			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			String data;
 			this.numero_oficio = Integer.parseInt(request.getParameter("nOficio"));
 			data = request.getParameter("dataOficio");
-			//this.data_oficio = dt.parse(data);
+			this.data_oficio = dt.parse(data);
 			this.nome_associacao = request.getParameter("nomeAssoc");
 			this.sigla_associacao = request.getParameter("siglaAssoc");
 			this.endereco_associacao = request.getParameter("enderecoAssoc");
@@ -40,19 +42,50 @@ public class FiliarAssociacaoCommand implements Command {
 			this.receiver = new Secretario();
 			this.request = request;
 			this.response = response;
+			
 		} catch (NumberFormatException e) {
 			try {
-				request.setAttribute("errorMsg", "Matricula deve conter somente numeros");
+				request.setAttribute("errorMsg", "Passagem de caracteres em campo numerico");
 				request.getRequestDispatcher("/error.jsp").forward(request, response);
+
 			} catch (IOException|ServletException e2) {
-				e.printStackTrace();
+				e2.printStackTrace();
+			}
+		} catch (ParseException e) {
+			try {
+				request.setAttribute("errorMsg", "Data invalida");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+
+			} catch (IOException|ServletException e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		String callback = "";
+		String credenciais = "";
+		try {
+			callback = this.receiver.lancarFiliacao(numero_oficio, data_oficio, nome_associacao, sigla_associacao, endereco_associacao, tel_associacao, comprovante_pagamento);
+			if (callback.contains("SUCCESS")) {
+				credenciais = callback.substring(new String("SUCCESS ").length());
+				request.setAttribute("successMsg", nome_associacao+" criada com sucesso\n"+credenciais);
+				request.getRequestDispatcher("/sucesso.jsp").forward(request, response);
+			} else {
+				request.setAttribute("errorMsg", callback);
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				
+			}
+		} catch  (ServletException|IOException e) {
+			e.printStackTrace();
+			try {
+				request.setAttribute("errorMsg", "Erro inesperado no servidor");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			} catch (ServletException|IOException e2) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 

@@ -30,7 +30,7 @@ public class ValidationCommand implements Command {
 				request.setAttribute("errorMsg", "Matricula deve conter somente numeros");
 				request.getRequestDispatcher("/error.jsp").forward(request, response);
 			} catch (IOException|ServletException e2) {
-				e.printStackTrace();
+				e2.printStackTrace();
 			}
 		}
 	}

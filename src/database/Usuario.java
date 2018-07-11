@@ -28,6 +28,10 @@ public class Usuario {
 	
 	public Usuario () {}
 	
+	public String get_login () {
+		return usua_login;
+	}
+	
 	public byte get_acesso() {
 		return usua_acesso;
 	}
