@@ -12,7 +12,10 @@
 	SISFARJ - Menu principal
 </div>
 <div>
-	<a href=""> Filiar associação</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/filiarAssoc.jsp"/>
+		<button  type="submit"> Filiar associação</button>
+	</form>
 	<a href=""> Alterar filiação de associação</a><br>
 	<a href=""> Listar associação</a><br>
 	<a href=""> Cadastrar atleta</a><br>

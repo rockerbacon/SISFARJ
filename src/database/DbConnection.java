@@ -14,13 +14,7 @@ public class DbConnection {
 	public static final String database = "db_sisfarj";
 	
 	public static Connection connect(String database, String user, String password) throws SQLException {
-		try {
-			Class.forName("org.postgresql.Driver");
-			return DriverManager.getConnection("jdbc:postgresql://localhost/"+database, user, password);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return DriverManager.getConnection("jdbc:postgresql://localhost/"+database, user, password);
 	}
 	
 	public static Connection connect() throws SQLException {
@@ -28,12 +22,6 @@ public class DbConnection {
 	}
 	
 	public static Connection mock() throws SQLException {
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			return DriverManager.getConnection("jdbc:derby:memory:mockdb;create=true");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return DriverManager.getConnection("jdbc:derby:memory:mockdb;create=true");
 	}
 }
