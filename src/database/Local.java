@@ -5,31 +5,31 @@ public class Local {
 	public static final String TABLE_NAME = "LOCAL";
 	
 	@Mapper.PrimaryKey
-	String local_nome;
+	String loca_nome;
 	
-	String local_endereco;
+	String loca_endereco;
 	
-	String local_tam_pisc;
+	short loca_tam_pisc;
 	
 	public Local() {}
 
-	public Local(String local_nome, String local_endereco, String local_tam_pisc) {
+	public Local(String local_nome, String local_endereco, short local_tam_pisc) {
 		super();
-		this.local_nome = local_nome;
-		this.local_endereco = local_endereco;
-		this.local_tam_pisc = local_tam_pisc;
+		this.loca_nome = local_nome;
+		this.loca_endereco = local_endereco;
+		this.loca_tam_pisc = local_tam_pisc;
 	}
 
-	public String getLocal_nome() {
-		return local_nome;
+	public String get_nome() {
+		return loca_nome;
 	}
 
-	public String getLocal_endereco() {
-		return local_endereco;
+	public String get_endereco() {
+		return loca_endereco;
 	}
 
-	public String getLocal_tam_pisc() {
-		return local_tam_pisc;
+	public short get_tam_pisc() {
+		return loca_tam_pisc;
 	}
 
 	

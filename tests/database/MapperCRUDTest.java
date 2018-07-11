@@ -4,8 +4,11 @@ import java.util.List;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.text.ParseException;
 
 import org.junit.*;
 
@@ -21,7 +24,7 @@ public class MapperCRUDTest {
 		
 		@Mapper.PrimaryKey
 		int tableCreationForeignId;
-		
+		@Mapper.PrimaryKey
 		int value;
 		
 		public TestTableForeign() {}
@@ -59,18 +62,30 @@ public class MapperCRUDTest {
 		
 		String tableCreationUndefStr;
 		
+		Date tableCreationDate;
+		
 		@Mapper.ForeignKey(references=TestTableForeign.TNAME)
 		int tableCreationForeignId;
 		
-		private TestTable() {}
+		@Mapper.ForeignKey(references=TestTableForeign.TNAME, on="value")
+		int tableCreationForeignValue;
 		
-		public TestTable (int tableCreationid1, short tableCreationid2, String tableCreationFixedStr, String tableCreationVariableStr, String tableCreationUndefStr, int tableCreationForeignId) {
+		
+		private TestTable() {}
+
+
+		public TestTable(int tableCreationid1, short tableCreationid2, String tableCreationFixedStr,
+				String tableCreationVariableStr, String tableCreationUndefStr, Date tableCreationDate,
+				int tableCreationForeignId, int tableCreationForeignValue) {
+			super();
 			this.tableCreationid1 = tableCreationid1;
 			this.tableCreationid2 = tableCreationid2;
 			this.tableCreationFixedStr = tableCreationFixedStr;
 			this.tableCreationVariableStr = tableCreationVariableStr;
 			this.tableCreationUndefStr = tableCreationUndefStr;
+			this.tableCreationDate = tableCreationDate;
 			this.tableCreationForeignId = tableCreationForeignId;
+			this.tableCreationForeignValue = tableCreationForeignValue;
 		}
 		
 	}
@@ -89,6 +104,8 @@ public class MapperCRUDTest {
 		String tableCreationVariableStr;
 		
 		String tableCreationUndefStr;
+		
+		Date tableCreationDate;
 		
 		int tableCreationForeignId;
 		
@@ -120,7 +137,9 @@ public class MapperCRUDTest {
 																											+ "tableCreationFixedStr = 'test' AND\n"
 																											+ "tableCreationVariableStr = 'test' AND\n"
 																											+ "tableCreationUndefStr = 'test' AND\n"
-																											+ "tableCreationForeignId = 0");
+																											+ "tableCreationDate = '01/01/2000' AND\n"
+																											+ "tableCreationForeignId = 0 AND\n"
+																											+ "tableCreationForeignValue = 0");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -152,7 +171,7 @@ public class MapperCRUDTest {
 			//criar tableas
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
 																												+"\tvalue INTEGER,\n"
-																												+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+																												+"\tPRIMARY KEY (tableCreationForeignId, value)\n)");
 			created++;
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
 																										+"\n\t tableCreationid1 INTEGER"
@@ -160,15 +179,18 @@ public class MapperCRUDTest {
 																										+",\n\t tableCreationFixedStr CHAR(10)"
 																										+",\n\t tableCreationVariableStr VARCHAR(15)"
 																										+",\n\t tableCreationUndefStr VARCHAR(255)"
+																										+",\n\t tableCreationDate TIMESTAMP"
 																										+",\n\t tableCreationForeignId INT"
+																										+",\n\t tableCreationForeignValue INT"
 																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
-																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+																										+",\n\t FOREIGN KEY (tableCreationForeignId, tableCreationForeignValue) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId, value)\n)");
 			created++;
 			
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			//gerar dados
 			TestTableForeign tf1 = new TestTableForeign(0, 2);
-			TestTable tc1 = new TestTable(1, (short)2, "test", "test2", "test3", 0);
-			TestTable tc2 = new TestTable(2, (short)1, "test", "test2", "test6", 0);
+			TestTable tc1 = new TestTable(1, (short)2, "test", "test2", "test3", dt.parse("01/01/2000"), 0, 2);
+			TestTable tc2 = new TestTable(2, (short)1, "test", "test2", "test6", dt.parse("01/01/2000"), 0, 2);
 			ArrayList<TestTable> objs = new ArrayList<TestTable>(2);
 			Iterator<TestTable> it;
 			objs.add(tc1);
@@ -189,14 +211,16 @@ public class MapperCRUDTest {
 				Assert.assertEquals(tc.tableCreationFixedStr, rs.getString(3).trim());
 				Assert.assertEquals(tc.tableCreationVariableStr, rs.getString(4));
 				Assert.assertEquals(tc.tableCreationUndefStr, rs.getString(5));
-				Assert.assertEquals(tc.tableCreationForeignId, rs.getObject(6));
+				Assert.assertEquals(tc.tableCreationDate, rs.getObject(6));
+				Assert.assertEquals(tc.tableCreationForeignId, rs.getObject(7));
+				Assert.assertEquals(tc.tableCreationForeignValue, rs.getObject(8));
 			}
 			
 			if (it.hasNext()) {
 				Assert.fail("Not all objects where inserted");
 			}
 			
-		} catch (SQLException e) {
+		} catch (SQLException|ParseException e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} finally {
@@ -223,11 +247,12 @@ public class MapperCRUDTest {
 			con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
 			List<TestTableDetailed> queryResult;
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 
 			//criar tableas
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
 																												+"\tvalue INTEGER,\n"
-																												+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+																												+"\tPRIMARY KEY (tableCreationForeignId, value)\n)");
 			created++;
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
 																										+"\n\t tableCreationid1 INTEGER"
@@ -235,20 +260,22 @@ public class MapperCRUDTest {
 																										+",\n\t tableCreationFixedStr CHAR(10)"
 																										+",\n\t tableCreationVariableStr VARCHAR(15)"
 																										+",\n\t tableCreationUndefStr VARCHAR(255)"
+																										+",\n\t tableCreationDate TIMESTAMP"
 																										+",\n\t tableCreationForeignId INT"
+																										+",\n\t tableCreationForeignValue INT"
 																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
-																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+																										+",\n\t FOREIGN KEY (tableCreationForeignId, tableCreationForeignValue) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId, value)\n)");
 			created++;
 			
 			//inserir dados na tabela
 			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
-			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
-			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', 0)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', TIMESTAMP '2000-01-01 00:00:00', 0, 50)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', TIMESTAMP '2000-01-01 00:00:00', 0, 50)");
 			
 			queryResult = mapper.read(-1, TestTableDetailed.class, new Filter("tableCreationid1", ">", 0), new Filter("tableCreationVariableStr", "=", "test2"));
 			//queryResult = mapper.read(0, TestTableDetailed.class);
-			if (queryResult.isEmpty()) {
-				Assert.fail("Query did not return any results");
+			if (queryResult.size() != 2) {
+				Assert.fail("Query did not return all the expected results");
 			} else {
 				queryResult.sort((o1, o2) -> ((TestTableDetailed)o1).tableCreationid1-((TestTableDetailed)o2).tableCreationid2);
 				Iterator<TestTableDetailed> it = queryResult.iterator();
@@ -260,6 +287,7 @@ public class MapperCRUDTest {
 				Assert.assertEquals("test", row.tableCreationFixedStr.trim());
 				Assert.assertEquals("test2", row.tableCreationVariableStr);
 				Assert.assertEquals("test3", row.tableCreationUndefStr);
+				Assert.assertEquals(dt.parse("01/01/2000"), row.tableCreationDate);
 				Assert.assertEquals(0, row.tableCreationForeignId);
 				Assert.assertEquals(50, row.value);
 				
@@ -269,13 +297,14 @@ public class MapperCRUDTest {
 				Assert.assertEquals("test4", row.tableCreationFixedStr.trim());
 				Assert.assertEquals("test2", row.tableCreationVariableStr);
 				Assert.assertEquals("test5", row.tableCreationUndefStr);
+				Assert.assertEquals(dt.parse("01/01/2000"), row.tableCreationDate);
 				Assert.assertEquals(0, row.tableCreationForeignId);
 				Assert.assertEquals(50, row.value);
 				
 			}
 			
 			
-		} catch (SQLException e) {
+		} catch (SQLException|ParseException e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} finally {
@@ -301,11 +330,12 @@ public class MapperCRUDTest {
 		try {
 			con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			
 			//criar tabela
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
 																						+"\tvalue INTEGER,\n"
-																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+																						+"\tPRIMARY KEY (tableCreationForeignId, value)\n)");
 			created++;
 			
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
@@ -314,16 +344,18 @@ public class MapperCRUDTest {
 																				+",\n\t tableCreationFixedStr CHAR(10)"
 																				+",\n\t tableCreationVariableStr VARCHAR(15)"
 																				+",\n\t tableCreationUndefStr VARCHAR(255)"
+																				+",\n\t tableCreationDate TIMESTAMP"
 																				+",\n\t tableCreationForeignId INT"
+																				+",\n\t tableCreationForeignValue INT"
 																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
-																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+																				+",\n\t FOREIGN KEY (tableCreationForeignId, tableCreationForeignValue) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId, value)\n)");
 			created++;
 			
 			//inserir dados na tabela
 			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
-			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', TIMESTAMP '2000-01-01 00:00:00', 0, 50)");
 			
-			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", 0);
+			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", dt.parse("01/01/2000"), 0, 50);
 			
 			mapper.update(tst);
 			
@@ -335,10 +367,12 @@ public class MapperCRUDTest {
 			Assert.assertEquals(tst.tableCreationFixedStr, rs.getString(3).trim());
 			Assert.assertEquals(tst.tableCreationVariableStr, rs.getString(4));
 			Assert.assertEquals(tst.tableCreationUndefStr, rs.getString(5));
-			Assert.assertEquals(tst.tableCreationForeignId, rs.getObject(6));
+			Assert.assertEquals(tst.tableCreationDate, rs.getObject(6));
+			Assert.assertEquals(tst.tableCreationForeignId, rs.getObject(7));
+			Assert.assertEquals(tst.tableCreationForeignValue, rs.getObject(8));
 			
 			
-		} catch (SQLException e) {
+		} catch (SQLException|ParseException e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} finally {
@@ -366,11 +400,12 @@ public class MapperCRUDTest {
 		try {
 			con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			
 			//criar tabela
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
 																						+"\tvalue INTEGER,\n"
-																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+																						+"\tPRIMARY KEY (tableCreationForeignId, value)\n)");
 			created++;
 			
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTable.TNAME+" ("
@@ -379,17 +414,19 @@ public class MapperCRUDTest {
 																				+",\n\t tableCreationFixedStr CHAR(10)"
 																				+",\n\t tableCreationVariableStr VARCHAR(15)"
 																				+",\n\t tableCreationUndefStr VARCHAR(255)"
+																				+",\n\t tableCreationDate TIMESTAMP"
 																				+",\n\t tableCreationForeignId INT"
+																				+",\n\t tableCreationForeignValue INT"
 																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
-																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
+																				+",\n\t FOREIGN KEY (tableCreationForeignId, tableCreationForeignValue) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId, value)\n)");
 			created++;
 			
 			//inserir dados na tabela
 			con.createStatement().executeUpdate("INSERT INTO "+TestTableForeign.TNAME+" VALUES (0, 50)");
-			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', 0)");
-			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', 0)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (1, 2, 'test', 'test2', 'test3', TIMESTAMP '2000-01-01 00:00:00', 0, 50)");
+			con.createStatement().executeUpdate("INSERT INTO "+TestTable.TNAME+" VALUES (4, 2, 'test4', 'test2', 'test5', TIMESTAMP '2000-01-01 00:00:00', 0, 50)");
 			
-			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", 0);
+			TestTable tst = new TestTable(1, (short)2, "notest", "notest1", "notest3", dt.parse("01/01/2000"), 0, 50);
 			
 			mapper.delete(tst);
 			
@@ -401,7 +438,7 @@ public class MapperCRUDTest {
 			}
 			
 			
-		} catch (SQLException e) {
+		} catch (SQLException|ParseException e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		} finally {
@@ -432,7 +469,7 @@ public class MapperCRUDTest {
 			//criar tabela
 			con.createStatement().executeUpdate("CREATE TABLE "+TestTableForeign.TNAME+" ( tableCreationForeignId INTEGER,\n"
 																						+"\tvalue INTEGER,\n"
-																						+"\tPRIMARY KEY (tableCreationForeignId)\n)");
+																						+"\tPRIMARY KEY (tableCreationForeignId, value)\n)");
 			created++;
 			
 			mapper.delete(TestTableForeign.class);
