@@ -5,8 +5,13 @@ import java.util.Date;
 @Mapper.UseTables({Participacao.TABLE_NAME})
 public class Participacao {
 	public static final String TABLE_NAME = "PARTICIPACAO";
-
 	
+	@Mapper.PrimaryKey
+	int participacaoMatricula;
+	
+	@Mapper.PrimaryKey
+	int participacaoProva;
+
 	Date tempo;
 	
 	Date recorde;
@@ -44,6 +49,22 @@ public class Participacao {
 
 	public void setColocacao(int colocacao) {
 		this.colocacao = colocacao;
+	}
+	
+	public int getParticipacaoMatricula() {
+		return participacaoMatricula;
+	}
+
+	public void setParticipacaoMatricula(int participacaoMatricula) {
+		this.participacaoMatricula = participacaoMatricula;
+	}
+
+	public int getParticipacaoProva() {
+		return participacaoProva;
+	}
+
+	public void setParticipacaoProva(int participacaoProva) {
+		this.participacaoProva = participacaoProva;
 	}
 	
 	
