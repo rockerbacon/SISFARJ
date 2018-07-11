@@ -11,7 +11,7 @@ import org.junit.*;
 
 import database.Mapper.Filter;
 
-public class MapperCRUDTest {
+public class MapperMockerCRUDTest {
 	
 	@Mapper.UseTables({TestTableForeign.TNAME})
 	private static class TestTableForeign {
@@ -103,7 +103,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		Connection con = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			mapper.create(TestTableForeign.class);
@@ -146,7 +146,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tableas
@@ -220,7 +220,7 @@ public class MapperCRUDTest {
 		Connection con = null;
 		int created = 0;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			List<TestTableDetailed> queryResult;
 
@@ -299,7 +299,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela
@@ -364,7 +364,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela
@@ -426,7 +426,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		Connection con = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela
