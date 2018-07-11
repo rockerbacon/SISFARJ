@@ -14,6 +14,7 @@
 <div>
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/filiarAssoc.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Filiar associação</button>
 	</form>
 	<a href=""> Alterar filiação de associação</a><br>

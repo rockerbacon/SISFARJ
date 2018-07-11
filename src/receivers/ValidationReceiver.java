@@ -6,30 +6,38 @@ import java.sql.SQLException;
 import database.DbConnection;
 import database.Mapper;
 import database.Mapper.Filter;
-import database.Associacao;
+import database.Usuario;
 import java.util.List;
 
 public class ValidationReceiver {
 
-	public boolean validate (int matricula, String senha) {
-		boolean validated = false;
+	public String validate (String login, String senha, byte acessoNecessario) {
+		String callback = null;
 		try {
 			Connection con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
 			
-			List<Associacao> assol = mapper.read(1, Associacao.class, new Filter("asso_matricula", "=", matricula));
+		
+			List<Usuario> usual = mapper.read(1, Usuario.class, new Filter("usua_login", "=", login));
 			
-			if (!assol.isEmpty()) {
-				Associacao asso = assol.get(0);
-				if (asso.get_senha().equals(senha)) {
-					validated = true;
+			if (!usual.isEmpty()) {
+				Usuario usua = usual.get(0);
+				if (usua.get_acesso() != acessoNecessario) {
+					callback = "Usuario nao possui acesso necessario";
+				} else if (!usua.get_senha().equals(senha)) {
+					callback = "Senha incorreta";
+				} else {
+					callback = "SUCCESS";
 				}
+			} else {
+				callback = "Usuario nao cadastrado no sistema";
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			callback = "Ocorreu um erro inesperado no servidor";
 		}
-		return validated;
+		return callback;
 	}
 	
 }
