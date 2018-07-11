@@ -9,6 +9,8 @@
 <body>
 	<h1>Acao concluida com sucesso</h1>
 	<h3>${successMsg}</h3>
-
+	<a href = "home.jsp">
+		<button>Home</button>
+	</a>
 </body>
 </html>
