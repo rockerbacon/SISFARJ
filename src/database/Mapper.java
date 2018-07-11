@@ -1,9 +1,12 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
@@ -18,6 +21,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 public class Mapper {
 	
@@ -84,9 +88,9 @@ public class Mapper {
 	protected static String mapToSqlType (Field field) throws IllegalArgumentException {
 		String className = field.getType().getSimpleName();
 		String sqlName;
-		switch (className) {
+		switch (className.toUpperCase()) {
 		
-			case "String":
+			case "STRING":
 				StringSize annotation = field.getDeclaredAnnotation(StringSize.class);
 				if (annotation == null) {
 					sqlName = "VARCHAR(255)";
@@ -99,42 +103,34 @@ public class Mapper {
 				}
 			break;
 		
-			case "char":
-			case "Char":
+			case "CHAR":
 				sqlName = "CHARACTER";
 			break;
 			
-			case "boolean":
-			case "Boolean":
-				sqlName = "BOOLEAN";
-			break;
-			
-			case "short":
-			case "Short":
+			case "BOOLEAN":
+			case "BYTE":
+			case "SHORT":
 				sqlName = "SMALLINT";
 			break;
 			
-			case "int":
-			case "Integer":
+			case "INT":
+			case "INTEGER":
 				sqlName = "INTEGER";
 			break;
 			
-			case "long":
-			case "Long":
+			case "LONG":
 				sqlName = "BIGINT";
 			break;
 			
-			case "float":
-			case "Float":
+			case "FLOAT":
 				sqlName = "FLOAT";
 			break;
 			
-			case "double":
-			case "Double":
+			case "DOUBLE":
 				sqlName = "DOUBLE PRECISION";
 			break;
 			
-			case "Date":
+			case "DATE":
 				sqlName = "TIMESTAMP";
 			break;
 			
@@ -158,7 +154,11 @@ public class Mapper {
 		if (parameters != null) {
 			Iterator<Object> it = parameters.iterator();
 			while (it.hasNext()) {
-				statement.setObject(++i, it.next());
+				Object obj= it.next();
+				if (obj.getClass().equals(Date.class))					
+					statement.setObject(++i, obj, Types.TIMESTAMP);
+				else
+					statement.setObject(++i, obj);
 			}
 		}
 		
@@ -297,6 +297,8 @@ public class Mapper {
 		Field[] fields = table.getDeclaredFields();
 		String[] tables = Mapper.getDeclaredTables(table);
 		ForeignKey fk = null;
+		HashMap<String, LinkedList<Field>> foreignKeys = new HashMap<String, LinkedList<Field>>();
+		Iterator<Map.Entry<String, LinkedList<Field>>> it;
 		
 		//check consistency
 		if (fields.length == 0) {
@@ -311,7 +313,7 @@ public class Mapper {
 		query.append(tables[0]);
 		query.append(" (\n");
 		
-		primaryKeys.append("PRIMARY KEY(");
+		primaryKeys.append("\tPRIMARY KEY(");
 	
 		for (Field field : fields) {
 			if (!Modifier.isStatic(field.getModifiers())) {
@@ -329,24 +331,55 @@ public class Mapper {
 				
 				//if annoted as foreign key add constraint
 				if ( (fk = field.getDeclaredAnnotation(ForeignKey.class)) != null) {
-					query.append("\tFOREIGN KEY(");
-					query.append(field.getName());
-					query.append(") REFERENCES ");
-					query.append(fk.references());
-					query.append("(");
-					if (fk.on().isEmpty())
-						query.append(field.getName());
-					else
-						query.append(fk.on());
-					query.append("),\n");
+					if (!foreignKeys.containsKey(fk.references())) {
+						foreignKeys.put(fk.references(), new LinkedList<Field>());
+					}
+					foreignKeys.get(fk.references()).add(field);
 				}
 			}
 		}
 		//remove trailling characters
 		primaryKeys.setLength(primaryKeys.length()-2);
 		
-		primaryKeys.append(")\n");
+		primaryKeys.append(")");
 		query.append(primaryKeys);
+		
+		it = foreignKeys.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, LinkedList<Field>> entry = it.next();
+			String foreignTable = entry.getKey();
+			Iterator<Field> fieldIt = entry.getValue().iterator();
+			StringBuilder references = new StringBuilder();
+			Field currFk;
+			
+			currFk = fieldIt.next();
+			fk = currFk.getAnnotation(Mapper.ForeignKey.class);
+			query.append(",\n\tFOREIGN KEY(");
+			query.append(currFk.getName());
+			if (fk.on().isEmpty())
+				references.append(currFk.getName());
+			else
+				references.append(fk.on());
+			
+			while(fieldIt.hasNext()) {
+				currFk = fieldIt.next();
+				fk = currFk.getAnnotation(Mapper.ForeignKey.class);
+				query.append(", ");
+				query.append(currFk.getName());
+				references.append(", ");
+				if (fk.on().isEmpty())
+					references.append(currFk.getName());
+				else
+					references.append(fk.on());	
+			}
+			
+			query.append(") REFERENCES ");
+			query.append(foreignTable);
+			query.append("(");
+			query.append(references);
+			query.append(")");
+		}
+		
 		query.append("\n)");
 		
 		//System.out.println(query.toString());	//debug

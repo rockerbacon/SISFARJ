@@ -1,29 +1,29 @@
 package database;
 
-@Mapper.UseTables({Local.TABLE_NAME})
+@Mapper.UseTables({FormatoProva.TABLE_NAME})
 public class FormatoProva {
 	public static final String TABLE_NAME = "FORMATO_PROVA";
 	
 	@Mapper.PrimaryKey
-	String fmt_prova_distancia;
+	short form_distancia;
 	
 	@Mapper.PrimaryKey
-	String fmt_prova_nado;
+	char form_nado;
 
 	public FormatoProva() {}
 	
-	public FormatoProva(String fmt_prova_distancia, String fmt_prova_nado) {
+	public FormatoProva(short fmt_prova_distancia, char fmt_prova_nado) {
 		super();
-		this.fmt_prova_distancia = fmt_prova_distancia;
-		this.fmt_prova_nado = fmt_prova_nado;
+		this.form_distancia = fmt_prova_distancia;
+		this.form_nado = fmt_prova_nado;
 	}
 
-	public String get_distancia() {
-		return fmt_prova_distancia;
+	public short get_distancia() {
+		return form_distancia;
 	}
 
-	public String get_nado() {
-		return fmt_prova_nado;
+	public char get_nado() {
+		return form_nado;
 	}
 	
 	

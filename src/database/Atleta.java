@@ -8,72 +8,89 @@ public class Atleta {
 	public static final String TABLE_NAME = "ATLETA";
 	
 	@Mapper.PrimaryKey
-	int atl_matricula;
+	int atle_matricula;
 	
-	String atl_nome;
+	String atle_nome;
 	
-	String atl_categoria;
+	String atle_categoria;
 	
-	int atl_num;
+	int atle_numero;
 	
-	long atl_indice;
+	long atle_indice;
 	
-	Date atl_oficio_data;
+	Date atle_oficio_data;
 	
-	Date atl_asso_data;
+	Date atle_associacao_data;
 
-	Date atl_nasc_data;
+	Date atle_nascimento_data;
+	
+	@Mapper.ForeignKey(references=Associacao.TABLE_NAME)
+	int asso_matricula;
 	
 	public Atleta () {}
 
-	public Atleta(int atl_matricula, String atl_nome, String atl_categoria, int atl_num, long atl_indice,
-			Date atl_oficio_data, Date atl_asso_data, Date atl_nasc_data) {
+
+	public Atleta(String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
+			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula) {
 		super();
-		this.atl_matricula = atl_matricula;
-		this.atl_nome = atl_nome;
-		this.atl_categoria = atl_categoria;
-		this.atl_num = atl_num;
-		this.atl_indice = atl_indice;
-		this.atl_oficio_data = atl_oficio_data;
-		this.atl_asso_data = atl_asso_data;
-		this.atl_nasc_data = atl_nasc_data;
+		this.atle_nome = atle_nome;
+		this.atle_categoria = atle_categoria;
+		this.atle_numero = atle_numero;
+		this.atle_indice = atle_indice;
+		this.atle_oficio_data = atle_oficio_data;
+		this.atle_associacao_data = atle_associacao_data;
+		this.atle_nascimento_data = atle_nascimento_data;
+		this.asso_matricula = asso_matricula;
 	}
 
 
 	public int get_matricula() {
-		return atl_matricula;
+		return atle_matricula;
 	}
+
 
 	public String get_nome() {
-		return atl_nome;
+		return atle_nome;
 	}
+
 
 	public String get_categoria() {
-		return atl_categoria;
+		return atle_categoria;
 	}
 
-	public int get_num() {
-		return atl_num;
+
+	public int get_numero() {
+		return atle_numero;
 	}
+
 
 	public long get_indice() {
-		return atl_indice;
+		return atle_indice;
 	}
+
 
 	public Date get_oficio_data() {
-		return atl_oficio_data;
+		return atle_oficio_data;
 	}
 
-	public Date get_asso_data() {
-		return atl_asso_data;
+
+	public Date get_associacao_data() {
+		return atle_associacao_data;
 	}
 
-	public Date get_nasc_data() {
-		return atl_nasc_data;
+
+	public Date get_nascimento_data() {
+		return atle_nascimento_data;
 	}
 
-	public void set_matricula(int atl_matricula) {
-		this.atl_matricula = atl_matricula;
+
+	public int get_asso_matricula() {
+		return asso_matricula;
+	}
+
+
+	public void set_matricula(int atle_matricula) {
+		this.atle_matricula = atle_matricula;
 	}
 	
 	
