@@ -11,7 +11,7 @@ import org.junit.*;
 
 import database.Mapper.Filter;
 
-public class MapperCRUDTest {
+public class MapperMockerCRUDTest {
 	
 	@Mapper.UseTables({TestTableForeign.TNAME})
 	private static class TestTableForeign {
@@ -103,7 +103,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		Connection con = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			mapper.create(TestTableForeign.class);
@@ -144,8 +144,9 @@ public class MapperCRUDTest {
 	public void insert () {
 		Connection con = null;
 		int created = 0;
+		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tableas
@@ -158,7 +159,7 @@ public class MapperCRUDTest {
 																										+",\n\t tableCreationid2 SMALLINT"
 																										+",\n\t tableCreationFixedStr CHAR(10)"
 																										+",\n\t tableCreationVariableStr VARCHAR(15)"
-																										+",\n\t tableCreationUndefStr VARCHAR"
+																										+",\n\t tableCreationUndefStr VARCHAR(255)"
 																										+",\n\t tableCreationForeignId INT"
 																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
 																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
@@ -177,12 +178,11 @@ public class MapperCRUDTest {
 			mapper.create(tc1);
 			mapper.create(tc2);
 			
-			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME+" WHERE tableCreationVariableStr = 'test2' ORDER BY 1 ASC");
+			rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME+" WHERE tableCreationVariableStr = 'test2' ORDER BY 1 ASC");
 			
 			//verificar retorno dos dados
-			rs.next();
 			it = objs.iterator();
-			while (!rs.isAfterLast() && it.hasNext()) {
+			while (rs.next() && it.hasNext()) {
 				TestTable tc = it.next();
 				Assert.assertEquals(tc.tableCreationid1, rs.getInt(1));
 				Assert.assertEquals(tc.tableCreationid2, rs.getShort(2));
@@ -190,7 +190,6 @@ public class MapperCRUDTest {
 				Assert.assertEquals(tc.tableCreationVariableStr, rs.getString(4));
 				Assert.assertEquals(tc.tableCreationUndefStr, rs.getString(5));
 				Assert.assertEquals(tc.tableCreationForeignId, rs.getObject(6));
-				rs.next();
 			}
 			
 			if (it.hasNext()) {
@@ -202,6 +201,7 @@ public class MapperCRUDTest {
 			Assert.fail(e.getMessage());
 		} finally {
 			try {
+				if (rs != null) rs.close();
 				switch (created) {
 					case 2:
 						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
@@ -220,7 +220,7 @@ public class MapperCRUDTest {
 		Connection con = null;
 		int created = 0;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			List<TestTableDetailed> queryResult;
 
@@ -234,7 +234,7 @@ public class MapperCRUDTest {
 																										+",\n\t tableCreationid2 SMALLINT"
 																										+",\n\t tableCreationFixedStr CHAR(10)"
 																										+",\n\t tableCreationVariableStr VARCHAR(15)"
-																										+",\n\t tableCreationUndefStr VARCHAR"
+																										+",\n\t tableCreationUndefStr VARCHAR(255)"
 																										+",\n\t tableCreationForeignId INT"
 																										+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
 																										+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
@@ -297,8 +297,9 @@ public class MapperCRUDTest {
 	public void update () {
 		Connection con = null;
 		int created = 0;
+		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela
@@ -312,7 +313,7 @@ public class MapperCRUDTest {
 																				+",\n\t tableCreationid2 SMALLINT"
 																				+",\n\t tableCreationFixedStr CHAR(10)"
 																				+",\n\t tableCreationVariableStr VARCHAR(15)"
-																				+",\n\t tableCreationUndefStr VARCHAR"
+																				+",\n\t tableCreationUndefStr VARCHAR(255)"
 																				+",\n\t tableCreationForeignId INT"
 																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
 																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
@@ -326,7 +327,7 @@ public class MapperCRUDTest {
 			
 			mapper.update(tst);
 			
-			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
+			rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
 			
 			rs.next();
 			Assert.assertEquals(tst.tableCreationid1, rs.getInt(1));
@@ -342,6 +343,7 @@ public class MapperCRUDTest {
 			Assert.fail(e.getMessage());
 		} finally {
 			try {
+				if (rs != null) rs.close();
 				switch (created) {
 					case 2:
 						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
@@ -360,8 +362,9 @@ public class MapperCRUDTest {
 	public void delete () {
 		Connection con = null;
 		int created = 0;
+		ResultSet rs = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela
@@ -375,7 +378,7 @@ public class MapperCRUDTest {
 																				+",\n\t tableCreationid2 SMALLINT"
 																				+",\n\t tableCreationFixedStr CHAR(10)"
 																				+",\n\t tableCreationVariableStr VARCHAR(15)"
-																				+",\n\t tableCreationUndefStr VARCHAR"
+																				+",\n\t tableCreationUndefStr VARCHAR(255)"
 																				+",\n\t tableCreationForeignId INT"
 																				+",\n\t PRIMARY KEY (tableCreationid1, tableCreationid2)"
 																				+",\n\t FOREIGN KEY (tableCreationForeignId) REFERENCES "+TestTableForeign.TNAME+"(tableCreationForeignId)\n)");
@@ -390,11 +393,10 @@ public class MapperCRUDTest {
 			
 			mapper.delete(tst);
 			
-			ResultSet rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
+			rs = con.createStatement().executeQuery("SELECT * FROM "+TestTable.TNAME);
 			
 			rs.next();
-			rs.next();
-			if (!rs.isAfterLast()) {
+			if (rs.next()) {
 				Assert.fail("Row was not deleted from table");
 			}
 			
@@ -404,6 +406,7 @@ public class MapperCRUDTest {
 			Assert.fail(e.getMessage());
 		} finally {
 			try {
+				if (rs != null) rs.close();
 				switch (created) {
 					case 2:
 						con.createStatement().executeUpdate("DROP TABLE "+TestTable.TNAME);
@@ -423,7 +426,7 @@ public class MapperCRUDTest {
 		int created = 0;
 		Connection con = null;
 		try {
-			con = DbConnection.connect();
+			con = DbConnection.mock();
 			Mapper mapper = new Mapper(con);
 			
 			//criar tabela

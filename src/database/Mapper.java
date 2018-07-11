@@ -19,7 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Mapper implements DbMapperManager {
+public class Mapper {
 	
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.FIELD)
@@ -36,7 +36,7 @@ public class Mapper implements DbMapperManager {
 	@Target(ElementType.FIELD)
 	public @interface StringSize {
 		boolean fixed() default false;
-		int size() default -1;
+		int size() default 255;
 	}
 	
 	@Retention(RetentionPolicy.RUNTIME)
@@ -45,7 +45,7 @@ public class Mapper implements DbMapperManager {
 		String[] value();
 	}
 	
-	private Connection connection;
+	protected Connection connection;
 	
 	/**
 	 * Inicializa um mapper para a conexao especificada
@@ -81,7 +81,7 @@ public class Mapper implements DbMapperManager {
 	 * @return: String representando tipo equivalente em SQL
 	 * @throws IllegalArgumentException se compo nao pode ser mapeado
 	 */
-	private static String mapToSqlType (Field field) throws IllegalArgumentException {
+	protected static String mapToSqlType (Field field) throws IllegalArgumentException {
 		String className = field.getType().getSimpleName();
 		String sqlName;
 		switch (className) {
@@ -89,21 +89,12 @@ public class Mapper implements DbMapperManager {
 			case "String":
 				StringSize annotation = field.getDeclaredAnnotation(StringSize.class);
 				if (annotation == null) {
-					sqlName = "VARCHAR";
+					sqlName = "VARCHAR(255)";
 				} else {
 					if (annotation.fixed()) {
-				
-						if (annotation.size() == -1) {
-							throw new IllegalArgumentException("Field "+field.getName()+" is annotated as String of fixed size but has no size defined");
-						}
-					
 						sqlName = "CHAR("+annotation.size()+")";
-						
 					} else {
-						sqlName = "VARCHAR";
-						if (annotation.size() != -1) {
-							sqlName += "("+annotation.size()+")";
-						}
+						sqlName = "VARCHAR("+annotation.size()+")";
 					}
 				}
 			break;
@@ -160,7 +151,7 @@ public class Mapper implements DbMapperManager {
 	 * @param parameters: lista com parametros ordenados
 	 * @return
 	 */
-	private PreparedStatement generateQuery (String query, List<Object> parameters) throws SQLException {
+	protected PreparedStatement generateQuery (String query, List<Object> parameters) throws SQLException {
 		int i = 0;
 		PreparedStatement statement = this.connection.prepareStatement(query);
 		
@@ -174,7 +165,7 @@ public class Mapper implements DbMapperManager {
 		return statement;
 	}
 	
-	private static String[] getDeclaredTables (Class<?> c) throws IllegalArgumentException {
+	protected static String[] getDeclaredTables (Class<?> c) throws IllegalArgumentException {
 		UseTables declTables = c.getDeclaredAnnotation(UseTables.class);
 		if (declTables == null || declTables.value().length == 0) {
 			throw new IllegalArgumentException("Class "+c.getCanonicalName()+" has no declared tables");
@@ -182,7 +173,7 @@ public class Mapper implements DbMapperManager {
 		return declTables.value();
 	}
 	
-	private static Object retrieveData (ResultSet resultSet, String columnLabel, Class<?> returnType) throws SQLException, IllegalArgumentException {
+	protected static Object retrieveData (ResultSet resultSet, String columnLabel, Class<?> returnType) throws SQLException, IllegalArgumentException {
 		Object data = resultSet.getObject(columnLabel);
 		String dataType = data.getClass().getSimpleName();
 		String returnTypeName = returnType.getSimpleName();
@@ -299,7 +290,6 @@ public class Mapper implements DbMapperManager {
 	 * @throws SQLException
 	 * @throws IllegalArgumentException: Caso tabela nao possua campos ou algum dos campos nao possa ser mapeado
 	 */
-	@Override
 	public void create (Class<?> table) throws SQLException, IllegalArgumentException {
 		
 		StringBuilder query = new StringBuilder();
@@ -359,6 +349,7 @@ public class Mapper implements DbMapperManager {
 		query.append(primaryKeys);
 		query.append("\n)");
 		
+		//System.out.println(query.toString());	//debug
 		this.connection.prepareStatement(query.toString()).executeUpdate();
 		
 	}
@@ -369,7 +360,7 @@ public class Mapper implements DbMapperManager {
 	 * @throws IllegalArgumentException: If the object's class was not correctly created
 	 * @throws SQLException
 	 */
-	@Override
+	
 	public void create(Object object) throws IllegalArgumentException, SQLException {
 		StringBuilder query;
 		Class<?> objClass = object.getClass();
@@ -429,7 +420,7 @@ public class Mapper implements DbMapperManager {
 	 * @param filter: Filtro obrigatorio
 	 * @param others: Filtros opcionais
 	 */
-	@Override
+	
 	public <Type> List<Type> read(int maxRows, Class<Type> factory, Filter... filters) throws IllegalArgumentException, SQLException {
 		
 		Constructor<?> constructor;
@@ -489,8 +480,7 @@ public class Mapper implements DbMapperManager {
 		
 		try {
 			constructor = factory.getConstructor();
-			queryResult.next();
-			while (!queryResult.isAfterLast() && maxRows != 0) {
+			while (queryResult.next() && maxRows != 0) {
 				//instanciar objeto da linha atual
 				@SuppressWarnings("unchecked")
 				Type obj = (Type)constructor.newInstance();
@@ -503,13 +493,14 @@ public class Mapper implements DbMapperManager {
 				
 				rows.add(obj);
 				
-				queryResult.next();
 				maxRows--;
 			}
 		} catch (IllegalAccessException|InstantiationException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException|NoSuchMethodException e) {
 			throw new IllegalArgumentException("Class "+factory.getCanonicalName()+" needs default constructor for query to be made");
+		} finally {
+			queryResult.close();
 		}
 		
 		return rows;
@@ -520,7 +511,7 @@ public class Mapper implements DbMapperManager {
 	 * Objeto sera procurado na base de acordo com suas chaves primarias e entao seus valores serao modificados
 	 * @param object: objeto a ser atualizado com os valores a serem atualizados
 	 */
-	@Override
+	
 	public void update (Object object) throws SQLException, IllegalArgumentException {
 		StringBuilder query = new StringBuilder();
 		Class<?> objClass = object.getClass();
@@ -592,7 +583,7 @@ public class Mapper implements DbMapperManager {
 	 * @param table: Classe que utiliza a tabela a ser dropada
 	 * @throws SQLException
 	 */
-	@Override
+	
 	public void delete (Class<?> table) throws SQLException, IllegalArgumentException {
 		String[] tables = Mapper.getDeclaredTables(table);
 		if (tables.length != 1) {
@@ -604,7 +595,7 @@ public class Mapper implements DbMapperManager {
 	 * Exclui objeto da base de dados
 	 * @param object: Objeto a ser excluido
 	 */
-	@Override
+	
 	public void delete (Object object) throws SQLException, IllegalArgumentException {
 		StringBuilder query = new StringBuilder();
 		Class<?> objClass = object.getClass();
