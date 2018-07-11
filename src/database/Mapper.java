@@ -428,7 +428,7 @@ public class Mapper {
 		String[] tables = Mapper.getDeclaredTables(factory);
 		StringBuilder query = new StringBuilder();
 		ArrayList<Object> params = null;
-		ResultSet queryResult;
+		ResultSet queryResult = null;
 		int i;
 		
 		List<Type> rows = (maxRows > 0)? new ArrayList<Type>(maxRows) : new LinkedList<Type>();
@@ -500,7 +500,7 @@ public class Mapper {
 		} catch (InvocationTargetException|NoSuchMethodException e) {
 			throw new IllegalArgumentException("Class "+factory.getCanonicalName()+" needs default constructor for query to be made");
 		} finally {
-			queryResult.close();
+			if (queryResult != null) queryResult.close();
 		}
 		
 		return rows;
