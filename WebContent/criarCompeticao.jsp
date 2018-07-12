@@ -11,7 +11,15 @@
 <nav class="navbar navbar-dark bg-dark">
    <a class="navbar-brand" href="#">SISFARJ</a>      
 </nav>
-
+<div class="container" style="margin-top: 30px;">
+	<h4 class="mb-3">SISFARJ - Criar competição</h4>
+	<form>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Nome da competição</label>
+			<input type="text" class="form-control" name="nomeCompeticao" placeholder="Nome da competição">
+		</div>
+	</form>
+</div>
 
 <script src="js/jquery-3.2.1.slim.min.js"></script>
 <script src="js/popper.min.js"></script>

@@ -29,7 +29,11 @@
 	<a href=""> Inserir resultado do atleta</a><br>
 	<a href=""> Inscrever atleta em competição</a><br>
 	<a href=""> Identificar usuário</a><br>
-	<a href=""> Incluir locais de competição</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/incluirLocaisCompeticao.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Incluir locais de competição</button>
+	</form>
 	<a href=""> Alterar locais de competição</a><br>
 	<a href=""> Listar locais de competição</a><br>
 	<a href=""> Criar competição</a><br>
