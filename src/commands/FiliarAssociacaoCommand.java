@@ -1,6 +1,8 @@
 package commands;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,8 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.DbConnection;
 import receivers.Secretario;
-import receivers.ValidationReceiver;
 
 public class FiliarAssociacaoCommand implements Command {
 	
@@ -25,12 +27,15 @@ public class FiliarAssociacaoCommand implements Command {
 	private Secretario receiver;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private Connection con;
 	
 	public FiliarAssociacaoCommand(HttpServletRequest request, HttpServletResponse response) {
+		String errMsg = null;
 		try {
 			
 			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			String data;
+			this.con = DbConnection.connect();
 			this.numero_oficio = Integer.parseInt(request.getParameter("nOficio"));
 			data = request.getParameter("dataOficio");
 			this.data_oficio = dt.parse(data);
@@ -39,23 +44,22 @@ public class FiliarAssociacaoCommand implements Command {
 			this.endereco_associacao = request.getParameter("enderecoAssoc");
 			this.tel_associacao = Integer.parseInt(request.getParameter("telAssoc"));
 			this.comprovante_pagamento = Integer.parseInt(request.getParameter("numComprovantePag"));
-			this.receiver = new Secretario();
+			this.receiver = new Secretario(con);
 			this.request = request;
 			this.response = response;
 			
 		} catch (NumberFormatException e) {
-			try {
-				request.setAttribute("errorMsg", "Passagem de caracteres em campo numerico");
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
-
-			} catch (IOException|ServletException e2) {
-				e2.printStackTrace();
-			}
+			errMsg = "Passagem de caracteres em campo numerico";
 		} catch (ParseException e) {
+			errMsg = "Data invalida";
+		} catch (SQLException e) {
+			errMsg = "Nao foi possivel conectar ao banco de dados";
+		} finally {
 			try {
-				request.setAttribute("errorMsg", "Data invalida");
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
-
+				if (errMsg != null) {
+					request.setAttribute("errorMsg", errMsg);
+					request.getRequestDispatcher("/error.jsp").forward(request, response);
+				}
 			} catch (IOException|ServletException e2) {
 				e2.printStackTrace();
 			}
@@ -83,6 +87,12 @@ public class FiliarAssociacaoCommand implements Command {
 				request.setAttribute("errorMsg", "Erro inesperado no servidor");
 				request.getRequestDispatcher("/error.jsp").forward(request, response);
 			} catch (ServletException|IOException e2) {
+				e.printStackTrace();
+			}
+		} finally {
+			try {
+				if (this.con != null) this.con.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}

@@ -12,13 +12,18 @@ import database.Usuario;
 
 public class Secretario extends Pessoa {
 	
+	private Connection con;
+	
+	public Secretario (Connection con) {
+		this.con = con;
+	}
+	
 	public String lancarFiliacao (int numeroOficio, Date data, String nomeAssociacao, String siglaAssociacao, String enderecoAssociacao, int telefone, int comprovantePagto) {
 		String callback = null;
 		Associacao assoc = new Associacao(nomeAssociacao, siglaAssociacao, enderecoAssociacao, telefone, numeroOficio, data);
 		Usuario tecnico = new Usuario("tecnico_"+siglaAssociacao, (byte)1, String.format("%04d", new java.util.Random().nextInt(9999)));
 		
 		try {
-			Connection con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
 			
 			List<Associacao> max = mapper.read(-1, Associacao.class);
