@@ -79,7 +79,6 @@ public class Secretario extends Pessoa {
 			callback = "Erro inesperado no servidor";
 		}
 		
-		
 		return callback;
 	}
 	
