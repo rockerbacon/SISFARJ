@@ -1,7 +1,7 @@
 package receivers;
 
 import database.Associacao;
-
+import database.Atleta;
 import database.DbConnection;
 import database.Mapper;
 import database.Mapper.Filter;
@@ -68,6 +68,42 @@ public class SecretarioTest {
 		}
 		
 		
+	}
+	
+	@Test
+	public void cadastrarAtleta () {
+		try {
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+			Associacao asso = new Associacao("test2", "tst", "rua 9", 123456, 123, dt.parse("01/01/2018"));
+			asso.set_matricula(123);
+			Mapper mapper = new Mapper(con);
+			Secretario scr = new Secretario(con);
+			
+			mapper.create(asso);
+			asso = mapper.read(1, Associacao.class, new Filter("asso_nome", "=", "test")).get(0);
+			
+			Atleta atle = new Atleta("teste", "m", 0, 0, dt.parse("01/01/2005"), dt.parse("01/01/2005"), dt.parse("01/01/2005"), asso.get_matricula());
+			
+			scr.cadastrarAtleta(atle.get_numero(), atle.get_oficio_data(), atle.get_nome(), atle.get_nascimento_data(), atle.get_associacao_data(), atle.get_asso_matricula(), atle.get_categoria(), 0);
+			
+			List<Atleta> atletas = mapper.read(-1, Atleta.class, new Filter("atle_nome", "=", "teste"));
+			Assert.assertNotEquals(0, atletas.size());
+			if (!atletas.isEmpty()) {
+				Atleta entry = atletas.get(0);
+				Assert.assertEquals(atle.get_categoria(), entry.get_categoria());
+				Assert.assertEquals(atle.get_indice(), entry.get_indice());
+				Assert.assertEquals(atle.get_nome(), entry.get_nome());
+				Assert.assertEquals(atle.get_asso_matricula(), entry.get_asso_matricula());
+				Assert.assertEquals(atle.get_associacao_data(), entry.get_associacao_data());
+				Assert.assertEquals(atle.get_nascimento_data(), entry.get_nascimento_data());
+				Assert.assertEquals(atle.get_numero(), entry.get_numero());
+				Assert.assertEquals(atle.get_oficio_data(), entry.get_oficio_data());
+			}
+			
+		} catch (ParseException|SQLException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
 	}
 	
 	@AfterClass
