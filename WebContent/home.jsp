@@ -19,7 +19,11 @@
 	</form>
 	<a href=""> Alterar filiação de associação</a><br>
 	<a href=""> Listar associação</a><br>
-	<a href=""> Cadastrar atleta</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/cadastroAtleta.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Cadastrar atleta</button>
+	</form>
 	<a href=""> Alterar cadastro de atleta</a><br>
 	<a href=""> Transferir atleta</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>
