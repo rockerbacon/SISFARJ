@@ -15,6 +15,11 @@ public class ProvaCompeticao {
 	@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
 	String loca_nome;
 	
+	
+	@Mapper.PrimaryKey
+	@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
+	short loca_tam_pisc;
+	
 	@Mapper.PrimaryKey
 	@Mapper.ForeignKey(references=Prova.TABLE_NAME)
 	String prov_nome;
@@ -40,6 +45,10 @@ public class ProvaCompeticao {
 
 	public String get_prov_nome() {
 		return prov_nome;
+	}
+	
+	public short get_loca_tam_pisc() {
+		return loca_tam_pisc;
 	}
 	
 }

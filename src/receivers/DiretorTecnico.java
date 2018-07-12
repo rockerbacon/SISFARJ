@@ -26,7 +26,7 @@ public class DiretorTecnico extends Secretario {
 			Mapper mapper = new Mapper(con);
 			
 			mapper.create(local1);
-			//mapper.create(local2);
+			mapper.create(local2);
 			
 			callback = "SUCCESS Local inserido";
 			
