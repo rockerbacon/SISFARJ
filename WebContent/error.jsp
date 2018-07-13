@@ -9,5 +9,6 @@
 <body>
 	<h1>Erro</h1>
 	<h3>${errorMsg}</h3>
+	<a href="${paginaRedirecionamento}"><input type="button" value="Voltar"></a>
 </body>
 </html>

@@ -19,7 +19,7 @@ public class IncluirLocaisCompeticaoCommand implements Command {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
-	public IncluirLocaisCompeticaoCommand(HttpServletRequest request, HttpServletResponse response) {
+	public IncluirLocaisCompeticaoCommand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			this.nome_competicao = request.getParameter("nomeCompeticao");
 			this.endereco_competicao = request.getParameter("enderecoCompeticao");
@@ -28,6 +28,32 @@ public class IncluirLocaisCompeticaoCommand implements Command {
 			this.receiver = new DiretorTecnico();
 			this.request = request;
 			this.response = response;
+			
+			//Tratamento de fluxo de exceção cagado
+			if(nome_competicao.isEmpty()) {
+				request.setAttribute("errorMsg", "O campo \"Nome\" não foi preenchido corretamente!");
+				request.setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
+			
+			if(endereco_competicao.isEmpty()) {
+				request.setAttribute("errorMsg", "O campo \"Endereço\" não foi preenchido corretamente!");
+				request.setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
+			
+			if(request.getParameter("piscina25metros").isEmpty()) {
+				request.setAttribute("errorMsg", "O campo \"Piscina 25 metros\" não foi preenchido corretamente!");
+				request.setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
+			
+			if(request.getParameter("piscina50metros").isEmpty()) {
+				request.setAttribute("errorMsg", "O campo \"Piscina 50 metros\" não foi preenchido corretamente!");
+				request.setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+			}
+			
 		} catch (NumberFormatException e) {
 			try {
 				request.setAttribute("errorMsg", "Passagem de caracteres em campo numerico");
@@ -49,6 +75,11 @@ public class IncluirLocaisCompeticaoCommand implements Command {
 				credenciais = callback.substring(new String("SUCCESS ").length());
 				request.setAttribute("successMsg", nome_competicao+" criada com sucesso\n"+credenciais);
 				request.getRequestDispatcher("/sucesso.jsp").forward(request, response);
+			} else if(callback.contains("Local já")){
+				request.setAttribute("errorMsg", callback);
+				request.setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				
 			} else {
 				request.setAttribute("errorMsg", callback);
 				request.getRequestDispatcher("/error.jsp").forward(request, response);
