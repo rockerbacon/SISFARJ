@@ -13,7 +13,8 @@
 </nav>
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Cadastrar atleta</h4>
-	<form action="CadastrarAtletaServlet" method="POST">
+	<form action="InvokerServlet" method="POST">
+		<input type="hidden" name="command" value="CadastrarAtletaCommand"/>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Número de ofício</label>
 			<input type="text" class="form-control" name="numero" id="numero"  placeholder="Número de ofício">

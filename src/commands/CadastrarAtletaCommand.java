@@ -8,14 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import database.DbConnection;
 import receivers.Secretario;
-import receivers.ValidationReceiver;
 
-public class CadastrarAtletaCommand implements Command {
+public class CadastrarAtletaCommand extends Command {
 	
 	private int numero;
 	private Date data_oficio;
@@ -27,11 +24,10 @@ public class CadastrarAtletaCommand implements Command {
 	private int comprovante_pagamento;
 	
 	private Secretario receiver;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
+	private Connection con;
 	
-	public CadastrarAtletaCommand(HttpServletRequest request, HttpServletResponse response) {
-		Connection con = null;
+	@Override
+	public void init() {
 		String errMsg = null;
 		try {
 			
@@ -41,24 +37,22 @@ public class CadastrarAtletaCommand implements Command {
 			String dataEntrada;
 			
 			con = DbConnection.connect();
-			this.numero = Integer.parseInt(request.getParameter("numero"));
+			this.numero = Integer.parseInt(getRequest().getParameter("numero"));
 			//System.out.println(this.numero);
-			dataOf = request.getParameter("data_oficio");
+			dataOf = getRequest().getParameter("data_oficio");
 			this.data_oficio = dt.parse(dataOf);
-			this.nome = request.getParameter("nome");
-			dataNasc = request.getParameter("data_nascimento");
+			this.nome = getRequest().getParameter("nome");
+			dataNasc = getRequest().getParameter("data_nascimento");
 			this.data_nascimento = dt.parse(dataNasc);
-			dataEntrada = request.getParameter("data_entrada");
+			dataEntrada = getRequest().getParameter("data_entrada");
 			this.data_entrada = dt.parse(dataEntrada);
-			this.matricula_atleta = Integer.parseInt(request.getParameter("matricula_atleta"));
+			this.matricula_atleta = Integer.parseInt(getRequest().getParameter("matricula_atleta"));
 			//System.out.println(this.matricula_atleta);
-			this.categoria = request.getParameter("categoria");
-			this.comprovante_pagamento = Integer.parseInt(request.getParameter("comprovante_pagamento"));
+			this.categoria = getRequest().getParameter("categoria");
+			this.comprovante_pagamento = Integer.parseInt(getRequest().getParameter("comprovante_pagamento"));
 			//this.comprovante_pagamento = 10;
 			//System.out.println(this.comprovante_pagamento);
 			this.receiver = new Secretario(con);
-			this.request = request;
-			this.response = response;
 			
 		} catch (NumberFormatException e) {
 			errMsg = "Passagem de caracteres em campo numerico";
@@ -69,12 +63,11 @@ public class CadastrarAtletaCommand implements Command {
 		
 		} finally {
 			try {
-				if (con != null) con.close();
 				if (errMsg != null) {
-					request.setAttribute("errorMsg", errMsg);
-					request.getRequestDispatcher("/error.jsp").forward(request, response);
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
-			} catch (SQLException|ServletException|IOException e) {
+			} catch (ServletException|IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -88,19 +81,25 @@ public class CadastrarAtletaCommand implements Command {
 			callback = this.receiver.cadastrarAtleta(numero, data_oficio, nome, data_nascimento, data_entrada, matricula_atleta, categoria, comprovante_pagamento);
 			if (callback.contains("SUCCESS")) {
 				credenciais = callback.substring(new String("SUCCESS ").length());
-				request.setAttribute("successMsg", nome+" criada com sucesso\n"+credenciais);
-				request.getRequestDispatcher("/sucesso.jsp").forward(request, response);
+				getRequest().setAttribute("successMsg", nome+" criada com sucesso\n"+credenciais);
+				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
-				request.setAttribute("errorMsg", callback);
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				getRequest().setAttribute("errorMsg", callback);
+				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				
 			}
 		} catch  (ServletException|IOException e) {
 			e.printStackTrace();
 			try {
-				request.setAttribute("errorMsg", "Erro inesperado no servidor");
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				getRequest().setAttribute("errorMsg", "Erro inesperado no servidor");
+				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 			} catch (ServletException|IOException e2) {
+				e.printStackTrace();
+			}
+		} finally {
+			try {
+				if (con != null) con.close();
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}

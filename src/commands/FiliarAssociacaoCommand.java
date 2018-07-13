@@ -8,13 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import database.DbConnection;
 import receivers.Secretario;
 
-public class FiliarAssociacaoCommand implements Command {
+public class FiliarAssociacaoCommand extends Command {
 	
 	private int numero_oficio;
 	private Date data_oficio;
@@ -25,28 +23,25 @@ public class FiliarAssociacaoCommand implements Command {
 	private int comprovante_pagamento;
 	
 	private Secretario receiver;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
 	private Connection con;
 	
-	public FiliarAssociacaoCommand(HttpServletRequest request, HttpServletResponse response) {
+	@Override
+	public void init() {
 		String errMsg = null;
 		try {
 			
 			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 			String data;
 			this.con = DbConnection.connect();
-			this.numero_oficio = Integer.parseInt(request.getParameter("nOficio"));
-			data = request.getParameter("dataOficio");
+			this.numero_oficio = Integer.parseInt(getRequest().getParameter("nOficio"));
+			data = getRequest().getParameter("dataOficio");
 			this.data_oficio = dt.parse(data);
-			this.nome_associacao = request.getParameter("nomeAssoc");
-			this.sigla_associacao = request.getParameter("siglaAssoc");
-			this.endereco_associacao = request.getParameter("enderecoAssoc");
-			this.tel_associacao = Integer.parseInt(request.getParameter("telAssoc"));
-			this.comprovante_pagamento = Integer.parseInt(request.getParameter("numComprovantePag"));
+			this.nome_associacao = getRequest().getParameter("nomeAssoc");
+			this.sigla_associacao = getRequest().getParameter("siglaAssoc");
+			this.endereco_associacao = getRequest().getParameter("enderecoAssoc");
+			this.tel_associacao = Integer.parseInt(getRequest().getParameter("telAssoc"));
+			this.comprovante_pagamento = Integer.parseInt(getRequest().getParameter("numComprovantePag"));
 			this.receiver = new Secretario(con);
-			this.request = request;
-			this.response = response;
 			
 		} catch (NumberFormatException e) {
 			errMsg = "Passagem de caracteres em campo numerico";
@@ -57,8 +52,8 @@ public class FiliarAssociacaoCommand implements Command {
 		} finally {
 			try {
 				if (errMsg != null) {
-					request.setAttribute("errorMsg", errMsg);
-					request.getRequestDispatcher("/error.jsp").forward(request, response);
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (IOException|ServletException e2) {
 				e2.printStackTrace();
@@ -74,18 +69,18 @@ public class FiliarAssociacaoCommand implements Command {
 			callback = this.receiver.lancarFiliacao(numero_oficio, data_oficio, nome_associacao, sigla_associacao, endereco_associacao, tel_associacao, comprovante_pagamento);
 			if (callback.contains("SUCCESS")) {
 				credenciais = callback.substring(new String("SUCCESS ").length());
-				request.setAttribute("successMsg", nome_associacao+" criada com sucesso\n"+credenciais);
-				request.getRequestDispatcher("/sucesso.jsp").forward(request, response);
+				getRequest().setAttribute("successMsg", nome_associacao+" criada com sucesso\n"+credenciais);
+				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
-				request.setAttribute("errorMsg", callback);
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				getRequest().setAttribute("errorMsg", callback);
+				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				
 			}
 		} catch  (ServletException|IOException e) {
 			e.printStackTrace();
 			try {
-				request.setAttribute("errorMsg", "Erro inesperado no servidor");
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				getRequest().setAttribute("errorMsg", "Erro inesperado no servidor");
+				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 			} catch (ServletException|IOException e2) {
 				e.printStackTrace();
 			}

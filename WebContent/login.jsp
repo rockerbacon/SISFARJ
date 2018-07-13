@@ -10,19 +10,20 @@
 	<title>Login do usuário</title>
 </head>
 <body class="text-center">
-    <form class="form-signin" data-op-form-id="0" action = "LoginServlet" method = "POST">
-    
-      <h1 class="h3 mb-3 font-weight-normal">Login no SISFARJ</h1>
+	<form class="form-signin" data-op-form-id="0" action = "InvokerServlet" method = "POST">
+		<input type="hidden" name="command" value="ValidationCommand"/>
+		
+		<h1 class="h3 mb-3 font-weight-normal">Login no SISFARJ</h1>
       
-      <label for="inputEmail" class="sr-only">Login</label>
-      <input type="user" name="login" id="inputUser" class="form-control" placeholder="Usuário" required="" autofocus="" data-op-id="0">
+		<label for="inputEmail" class="sr-only">Login</label>
+		<input type="user" name="login" id="inputUser" class="form-control" placeholder="Usuário" required="" autofocus="" data-op-id="0">
       
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="senha" id="inputPassword" class="form-control" placeholder="Senha" required="">
+		<label for="inputPassword" class="sr-only">Password</label>
+		<input type="password" name="senha" id="inputPassword" class="form-control" placeholder="Senha" required="">
       
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
       
-      <p class="mt-5 mb-3 text-muted">© 2018</p>
-    </form>
+		<p class="mt-5 mb-3 text-muted">© 2018</p>
+	</form>
 </body>
 </html>

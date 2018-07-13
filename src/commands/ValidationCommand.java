@@ -5,32 +5,27 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import database.DbConnection;
 import receivers.ValidationReceiver;
 
-public class ValidationCommand implements Command {
+public class ValidationCommand extends Command {
 	
 	private String login;
 	private String senha;
 	private byte acessoNecessario;
 	private ValidationReceiver receiver;
-	private HttpServletRequest request;
-	private HttpServletResponse response;
 	private Connection con;
 	
-	public ValidationCommand(HttpServletRequest request, HttpServletResponse response) {
+	@Override
+	public void init () {
 		String errMsg = null;
 		try {
 			con = DbConnection.connect();
-			this.login = request.getParameter("login");
-			this.senha = request.getParameter("senha");
-			this.acessoNecessario = Byte.parseByte((String)request.getSession().getAttribute("accessLevel"));
+			this.login = getRequest().getParameter("login");
+			this.senha = getRequest().getParameter("senha");
+			this.acessoNecessario = Byte.parseByte((String)getRequest().getSession().getAttribute("accessLevel"));
 			this.receiver = new ValidationReceiver(con);
-			this.request = request;
-			this.response = response;
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -38,13 +33,14 @@ public class ValidationCommand implements Command {
 		} finally {
 			try {
 				if (errMsg != null) {
-					request.setAttribute("errorMsg", errMsg);
-					request.getRequestDispatcher("/error.jsp").forward(request, response);
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (IOException|ServletException e) {
 				e.printStackTrace();
 			}
 		}
+		
 	}
 
 	@Override
@@ -52,11 +48,11 @@ public class ValidationCommand implements Command {
 		String callback;
 		try {
 			if ( (callback = this.receiver.validate(this.login, this.senha, this.acessoNecessario)).equals("SUCCESS") ) {
-				String proxPag = (String)this.request.getSession().getAttribute("afterLogin");
-				this.request.getRequestDispatcher(proxPag).forward(this.request, this.response);
+				String proxPag = (String)this.getRequest().getSession().getAttribute("afterLogin");
+				this.getRequest().getRequestDispatcher(proxPag).forward(this.getRequest(), this.getResponse());
 			} else {
-				this.request.setAttribute("errorMsg", callback);
-				this.request.getRequestDispatcher("/error.jsp").forward(this.request, this.response);
+				this.getRequest().setAttribute("errorMsg", callback);
+				this.getRequest().getRequestDispatcher("/error.jsp").forward(this.getRequest(), this.getResponse());
 			}
 		} catch (IOException|ServletException e) {
 			e.printStackTrace();

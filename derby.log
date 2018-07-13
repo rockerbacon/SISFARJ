@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Thu Jul 12 01:12:11 BRT 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0164-8cb0-71c1-000002e209d8 
+Thu Jul 12 23:27:08 BRT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0164-9176-9ee0-000002852b68 
 on database directory memory:/home/vitor/eclipse-workspace/git/SISFARJ/mockdb with class loader sun.misc.Launcher$AppClassLoader@77459877 
 Loaded from file:/home/vitor/eclipse-workspace/git/SISFARJ/lib/derby.jar
 java.vendor=Oracle Corporation

@@ -34,13 +34,6 @@ public class MapperMockerCRUDTest {
 			this.value = value;
 		}
 		
-		public int getTableCreationForeignId() {
-			return this.tableCreationForeignId;
-		}
-		
-		public int getValue () {
-			return this.value;
-		}
 	}
 
 	@Mapper.UseTables({TestTable.TNAME})

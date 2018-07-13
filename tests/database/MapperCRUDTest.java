@@ -33,14 +33,6 @@ public class MapperCRUDTest {
 			this.tableCreationForeignId = id;
 			this.value = value;
 		}
-		
-		public int getTableCreationForeignId() {
-			return this.tableCreationForeignId;
-		}
-		
-		public int getValue () {
-			return this.value;
-		}
 	}
 
 	@Mapper.UseTables({TestTable.TNAME})
@@ -111,7 +103,7 @@ public class MapperCRUDTest {
 		
 		int value;
 		
-		public TestTableDetailed () {}
+		public TestTableDetailed() {}
 		
 	}
 	
