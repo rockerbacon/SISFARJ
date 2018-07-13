@@ -34,6 +34,7 @@ public class ValidationCommand extends Command {
 			try {
 				if (errMsg != null) {
 					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "login.jsp");
 					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (IOException|ServletException e) {
@@ -48,11 +49,12 @@ public class ValidationCommand extends Command {
 		String callback;
 		try {
 			if ( (callback = this.receiver.validate(this.login, this.senha, this.acessoNecessario)).equals("SUCCESS") ) {
-				String proxPag = (String)this.getRequest().getSession().getAttribute("afterLogin");
-				this.getRequest().getRequestDispatcher(proxPag).forward(this.getRequest(), this.getResponse());
+				String proxPag = (String)getRequest().getSession().getAttribute("afterLogin");
+				getRequest().getRequestDispatcher(proxPag).forward(getRequest(), getResponse());
 			} else {
 				this.getRequest().setAttribute("errorMsg", callback);
-				this.getRequest().getRequestDispatcher("/error.jsp").forward(this.getRequest(), this.getResponse());
+				getRequest().setAttribute("paginaRedirecionamento", "login.jsp");
+				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 			}
 		} catch (IOException|ServletException e) {
 			e.printStackTrace();

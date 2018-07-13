@@ -12,33 +12,47 @@
 	SISFARJ - Menu principal
 </div>
 <div>
+
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/filiarAssoc.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Filiar associação</button>
 	</form>
+	
 	<a href=""> Alterar filiação de associação</a><br>
+	
 	<form action="LoginRedirectServlet">
-		<input type="hidden" name="afterLogin" value="ListarAssociacaoServlet"/>
+		<input type="hidden" name="afterLogin" value="/listarAssociacao.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
-		<button  type="submit"> Listar associação</button>
+		<button  type="submit"> Listar Associacao</button>
 	</form>
+	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/cadastroAtleta.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Cadastrar atleta</button>
 	</form>
+	
 	<a href=""> Alterar cadastro de atleta</a><br>
 	<a href=""> Transferir atleta</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>
 	<a href=""> Inscrever atleta em competição</a><br>
 	<a href=""> Identificar usuário</a><br>
+	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/incluirLocaisCompeticao.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Incluir locais de competição</button>
 	</form>
+	
 	<a href=""> Alterar locais de competição</a><br>
+	
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="ListarLocalDeCompeticaoServlet"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Listar locais de competiçao</button>
+	</form>
+	
 	<a href=""> Listar locais de competição</a><br>
 	<a href=""> Criar competição</a><br>
 	<a href=""> Alterar competição</a><br>

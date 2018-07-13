@@ -1,5 +1,10 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
+
 @Mapper.UseTables({Local.TABLE_NAME})
 public class Local {
 	public static final String TABLE_NAME = "LOCAL";
@@ -31,6 +36,16 @@ public class Local {
 
 	public short get_tam_pisc() {
 		return loca_tam_pisc;
+	}
+	
+	public static List<Local> listar() throws IllegalArgumentException, SQLException {
+		Connection con = DbConnection.connect();
+		Mapper mapper = new Mapper(con);
+		
+		List<Local> lista = mapper.read(-1, Local.class);
+		con.close();
+		
+		return lista;
 	}
 
 	
