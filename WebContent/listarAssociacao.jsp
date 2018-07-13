@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@ page import="java.util.Date" %>  
+<%@ page import="java.util.List,java.util.Set" %>  
+<%@ page import="database.Associacao" %>  
+
 <html>
 <head>
 <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -11,6 +17,31 @@
 <nav class="navbar navbar-dark bg-dark">
    <a class="navbar-brand" href="#">SISFARJ</a>      
 </nav>
+
+
+	<%
+	List<Associacao> associacao = (List) request.getAttribute("lista");
+
+	for(int i=0;i<associacao.size();i++){
+    %>
+    	<form action="LoginRedirectServlet">
+			<input type="hidden" name="afterLogin" value="/alterarFiliacaoAssociacao.jsp"/>
+			<input type="hidden" name="accessLevel" value="0"/>
+			<input type="hidden" name="matricula" value="<%=associacao.get(i).get_matricula()%>"/>
+			<input type="hidden" name="nome" value="<%=associacao.get(i).get_nome()%>"/>
+			<input type="hidden" name="sigla" value="<%=associacao.get(i).get_sigla()%>"/>
+			<input type="hidden" name="endereco" value="<%=associacao.get(i).get_endereco()%>"/>
+			<input type="hidden" name="telefone" value="<%=associacao.get(i).get_telefone()%>"/>
+			<input type="hidden" name="oficio" value="<%=associacao.get(i).get_oficio()%>"/>
+			<input type="hidden" name="data" value="<%=associacao.get(i).get_data()%>"/>
+			<button  type="submit"> <%=associacao.get(i).get_nome()%></button>
+		</form>
+        
+
+    <%
+    }
+    %>
+
 
 
 <script src="js/jquery-3.2.1.slim.min.js"></script>

@@ -50,6 +50,45 @@ public class Secretario extends Pessoa {
 		return callback;
 	}
 	
+	public List<Associacao> listarAssociacao() {
+		//String callback = null;
+		List<Associacao> lista = null;
+//		Associacao assoc = new Associacao(nomeAssociacao, siglaAssociacao, enderecoAssociacao, telefone, numeroOficio, data);
+//		Usuario tecnico = new Usuario("tecnico_"+siglaAssociacao, (byte)1, String.format("%04d", new java.util.Random().nextInt(9999)));
+//		
+		
+		try {
+			Mapper mapper = new Mapper(con);
+			lista = mapper.read(-1, Associacao.class);
+			for(int i=0;i<lista.size();i++){
+			    System.out.println(lista.get(i).get_nome());
+			} 
+			
+//			List<Associacao> max = mapper.read(-1, Associacao.class);
+//			int maxSeq = 0;
+//			if (max.size() != 0) {
+//				max.sort((a, b) ->  b.get_matricula()-a.get_matricula());
+//				maxSeq = max.get(0).get_matricula()+1;
+//			}
+//			
+//			assoc.set_matricula(maxSeq);
+//			
+//			mapper.create(assoc);
+//			mapper.create(tecnico);
+			
+//			callback = "SUCCESS Usuario do tecnico: "+tecnico.get_login()+"\nSenha: "+tecnico.get_senha();
+			return lista;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			//callback = "Erro inesperado no servidor";
+		}
+		return lista;
+		
+		
+		//return lista;
+	}
+	
 	public String cadastrarAtleta (int numero, Date data_oficio, String nome, Date data_nascimento, Date data_entrada, 
 			int matricula_atleta, String categoria, int comprovante_pagamento) {
 		String callback = null;
