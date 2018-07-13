@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Thu Jul 12 01:12:11 BRT 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0164-8cb0-71c1-000002e209d8 
-on database directory memory:/home/vitor/eclipse-workspace/git/SISFARJ/mockdb with class loader sun.misc.Launcher$AppClassLoader@77459877 
-Loaded from file:/home/vitor/eclipse-workspace/git/SISFARJ/lib/derby.jar
+Fri Jul 13 01:40:18 BRT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0164-91f0-8e13-00000d52d878 
+on database directory memory:/Users/gustavoebbo/Documents/UFRRJ/2018.1/SISFARJ/mockdb with class loader sun.misc.Launcher$AppClassLoader@f6f4d33 
+Loaded from file:/Users/gustavoebbo/Documents/UFRRJ/2018.1/SISFARJ/lib/derby.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_171-8u171-b11-0ubuntu0.16.04.1-b11
-user.dir=/home/vitor/eclipse-workspace/git/SISFARJ
-os.name=Linux
-os.arch=amd64
-os.version=4.15.0-24-generic
+java.runtime.version=1.8.0_73-b02
+user.dir=/Users/gustavoebbo/Documents/UFRRJ/2018.1/SISFARJ
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.4
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
