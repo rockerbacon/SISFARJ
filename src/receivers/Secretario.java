@@ -16,7 +16,7 @@ public class Secretario extends Pessoa {
 	private Connection con;
 	
 	public Secretario (Connection con) {
-		this.con = con;
+		this.setCon(con);
 	}
 	
 	public String lancarFiliacao (int numeroOficio, Date data, String nomeAssociacao, String siglaAssociacao, String enderecoAssociacao, int telefone, int comprovantePagto) {
@@ -25,7 +25,7 @@ public class Secretario extends Pessoa {
 		Usuario tecnico = new Usuario("tecnico_"+siglaAssociacao, (byte)1, String.format("%04d", new java.util.Random().nextInt(9999)));
 		
 		try {
-			Mapper mapper = new Mapper(con);
+			Mapper mapper = new Mapper(getCon());
 			
 			List<Associacao> max = mapper.read(-1, Associacao.class);
 			int maxSeq = 0;
@@ -58,7 +58,7 @@ public class Secretario extends Pessoa {
 //		
 		
 		try {
-			Mapper mapper = new Mapper(con);
+			Mapper mapper = new Mapper(getCon());
 			lista = mapper.read(-1, Associacao.class);
 			for(int i=0;i<lista.size();i++){
 			    System.out.println(lista.get(i).get_nome());
@@ -97,7 +97,7 @@ public class Secretario extends Pessoa {
 		//Usuario tecnico = new Usuario("tecnico_"+siglaAssociacao, (byte)1, String.format("%04d", new java.util.Random().nextInt(9999)));
 		
 		try {
-			Mapper mapper = new Mapper(con);
+			Mapper mapper = new Mapper(getCon());
 			
 			List<Atleta> max = mapper.read(-1, Atleta.class);
 			int maxSeq = 0;
@@ -119,6 +119,14 @@ public class Secretario extends Pessoa {
 		}
 		
 		return callback;
+	}
+
+	public Connection getCon() {
+		return con;
+	}
+
+	public void setCon(Connection con) {
+		this.con = con;
 	}
 	
 }

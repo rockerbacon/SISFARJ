@@ -24,7 +24,11 @@
 		<button  type="submit"> Listar associação</button>
 	</form>
 	<a href=""> o</a><br>
-	Cadastrar atleta
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/cadastroAtleta.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Cadastrar Atleta</button>
+	</form>
 	<a href=""> Alterar cadastro de atleta</a><br>
 	<a href=""> Transferir atleta</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>
@@ -32,6 +36,11 @@
 	<a href=""> Identificar usuário</a><br>
 	<a href=""> Incluir locais de competição</a><br>
 	<a href=""> Alterar locais de competição</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="ListarLocalDeCompeticaoServlet"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Listar locais de competiçao</button>
+	</form>
 	<a href=""> Listar locais de competição</a><br>
 	<a href=""> Criar competição</a><br>
 	<a href=""> Alterar competição</a><br>
