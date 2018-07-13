@@ -12,7 +12,7 @@ import database.Usuario;
 
 public class Secretario extends Pessoa {
 	
-	private Connection con;
+	protected Connection con;
 	
 	public Secretario (Connection con) {
 		this.setCon(con);
