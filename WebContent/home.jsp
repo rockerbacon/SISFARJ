@@ -48,7 +48,7 @@
 	<a href=""> Alterar locais de competição</a><br>
 	
 	<form action="LoginRedirectServlet">
-		<input type="hidden" name="afterLogin" value="ListarLocalDeCompeticaoServlet"/>
+		<input type="hidden" name="afterLogin" value="/listarLocaisDeCompeticao.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Listar locais de competiçao</button>
 	</form>
