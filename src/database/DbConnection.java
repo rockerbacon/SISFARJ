@@ -10,7 +10,7 @@ import org.apache.derby.jdbc.EmbeddedDriver;
 @SuppressWarnings("unused")
 public class DbConnection {
 	public static final String user = "postgres";
-	public static final String password = "db123";
+	public static final String password = "guga2301";
 	public static final String database = "db_sisfarj";
 	
 	public static Connection connect(String database, String user, String password) throws SQLException {

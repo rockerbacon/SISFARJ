@@ -14,6 +14,9 @@ import java.util.List;
 import java.sql.Connection;
 
 import org.junit.*;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.text.ParseException;
 
@@ -117,5 +120,21 @@ public class SecretarioTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void lancarFiliacaoSelenium () {
+		  System.setProperty("webdriver.chrome.driver", "/Users/gustavoebbo/Downloads/chromedriver");
+		  WebDriver driver = new ChromeDriver();
+		  driver.get("http://www.google.com/xhtml");
+		  Thread.sleep(5000);  // Let the user actually see something!
+		  WebElement searchBox = driver.findElement(By.name("q"));
+		  searchBox.sendKeys("ChromeDriver");
+		  searchBox.submit();
+		  Thread.sleep(5000);  // Let the user actually see something!
+		  driver.quit();
+		
+	}
+	
+	
 	
 }

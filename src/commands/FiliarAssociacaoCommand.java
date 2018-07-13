@@ -48,6 +48,8 @@ public class FiliarAssociacaoCommand implements Command {
 			this.request = request;
 			this.response = response;
 			
+			
+			
 		} catch (NumberFormatException e) {
 			errMsg = "Passagem de caracteres em campo numerico";
 		} catch (ParseException e) {
@@ -57,8 +59,9 @@ public class FiliarAssociacaoCommand implements Command {
 		} finally {
 			try {
 				if (errMsg != null) {
-					request.setAttribute("errorMsg", errMsg);
-					request.getRequestDispatcher("/error.jsp").forward(request, response);
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "filiarAssoc.jsp");
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (IOException|ServletException e2) {
 				e2.printStackTrace();
