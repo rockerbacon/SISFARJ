@@ -14,37 +14,33 @@
 
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Filiar associação</h4>
-	<form action="AlterarFiliarAssociacaoServlet" method="POST">
-		<div class="form-group">
-			<label for="nOficio">Número de ofício</label>
-			<input type="text" class="form-control" name="nOficio" id="nOficio" placeholder="Número de ofício" value="<%=request.getAttribute("oficio")%>">
-		</div>	
-		<div class="form-group">
-			<label for="Data">Data Ofício</label>
-			<input type="date" class="form-control" name="dataOficio" id="dataOficio" placeholder="Data Ofício">
-		</div>	
+	<form action="InvokerServlet" method="POST">
+		<input type="hidden" name="command" value="AlterarFiliacaoCommand"/>
+		
+		<input type="hidden" name="asso_matricula" value="<%=request.getSession().getAttribute("asso_matricula")%>"/>
 		<div class="form-group">
 			<label for="nomeAssoc">Nome</label>
-			<input type="text" class="form-control" name="nomeAssoc" id="nomeAssoc" placeholder="Nome">
+			<input type="text" class="form-control" name="asso_nome" id="nomeAssoc" value="<%=request.getSession().getAttribute("asso_nome")%>"/>
 		</div>
 		<div class="form-group">
 			<label for="siglaAssoc">Sigla</label>
-			<input type="text" class="form-control" name="siglaAssoc" id="siglaAssoc" placeholder="Sigla">
+			<input type="text" class="form-control" name="asso_sigla" id="siglaAssoc" value="<%=request.getSession().getAttribute("asso_sigla")%>"/>
 		</div>
+		<input type="hidden" name="asso_endereco" value="<%=request.getSession().getAttribute("asso_endereco")%>"/>
 		<div class="form-group">
-			<label for="enderecoAssoc">Endereço</label>
-			<input type="text" class="form-control" name="enderecoAssoc" id="enderecoAssoc" placeholder="Endereço">
+			<label for="telAssoc">Telefone</label>
+			<input type="text" class="form-control" name="asso_telefone" id="telAssoc" value="<%=request.getSession().getAttribute("asso_telefone")%>"/>
 		</div>
 		<div class="form-group">
 			<label for="telAssoc">Telefone</label>
-			<input type="text" class="form-control" name="telAssoc" id="telAssoc" placeholder="Telefone">
+			<input type="text" class="form-control" name="asso_oficio" id="telAssoc" value="<%=request.getSession().getAttribute("asso_oficio")%>"/>
 		</div>
 		<div class="form-group">
-			<label for="numComprovantePag">Número do comprovante de pagamento</label>
-			<input type="text" class="form-control" name="numComprovantePag" id="numComprovantePag" placeholder="Número do comprovante de pagamento">
+			<label for="Data">Data Ofício</label>
+			<input type="text" class="form-control" name="asso_data" id="dataOficio" value="<%=request.getSession().getAttribute("asso_data")%>"/>
 		</div>
 
-		<button type="submit" value="Cadastrar" class="btn btn-primary">Cadastrar</button>
+		<button type="submit" class="btn btn-primary">Alterar</button>
 	</form>
 </div>
 

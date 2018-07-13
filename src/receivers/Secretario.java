@@ -80,6 +80,22 @@ public class Secretario extends Pessoa {
 		
 		return callback;
 	}
+	
+	public String alterarFiliacaoAssociacao(int matricula, String nome, String sigla, String endereco, int telefone, int oficio, Date data) {
+		String callback = null;
+		try {
+			Associacao asso = new Associacao(nome, sigla, endereco, telefone, oficio, data);
+			asso.set_matricula(matricula);
+			Mapper mapper = new Mapper(con);
+			
+			mapper.update(asso);
+			callback = "SUCCESS";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			callback = "Erro inesperado no servidor";
+		}
+		return callback;
+	}
 
 	public Connection getCon() {
 		return con;

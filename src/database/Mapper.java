@@ -572,20 +572,28 @@ public class Mapper {
 			if (i == fields.length) {
 				throw new IllegalArgumentException("Class "+objClass.getCanonicalName()+" only has static fields");
 			}
+			
+			while (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
+				pks.add(fields[i]);
+				i++;
+			}
+			
+			if (i != fields.length) {
 		
-			query.append("\n\t");
-			query.append(fields[i].getName());
-			query.append("=?");
-			params.add(fields[i].get(object));
-			for (i++; i < fields.length; i++) {
-				if (!Modifier.isStatic(fields[i].getModifiers())) {
-					if (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
-						pks.add(fields[i]);
-					} else {
-						query.append(",\n\t");
-						query.append(fields[i].getName());
-						query.append("=?");
-						params.add(fields[i].get(object));
+				query.append("\n\t");
+				query.append(fields[i].getName());
+				query.append("=?");
+				params.add(fields[i].get(object));
+				for (i++; i < fields.length; i++) {
+					if (!Modifier.isStatic(fields[i].getModifiers())) {
+						if (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
+							pks.add(fields[i]);
+						} else {
+							query.append(",\n\t");
+							query.append(fields[i].getName());
+							query.append("=?");
+							params.add(fields[i].get(object));
+						}
 					}
 				}
 			}

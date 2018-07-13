@@ -49,6 +49,8 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 				errMsg = "O campo \"Piscina 50 metros\" não foi preenchido corretamente!";
 			}
 			
+		}catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch (SQLException e) {
 			errMsg = "Nao foi possivel conectar a base de dados";
 		} catch (NumberFormatException e) {
@@ -70,6 +72,7 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 	public void execute() {
 		String callback = "";
 		String credenciais = "";
+		String errMsg = null;
 		try {
 			callback = this.receiver.incluirLocalCompeticao(nome_competicao, endereco_competicao, piscina_25_metros, piscina_50_metros);
 			if(callback.contains("SUCCESS")) {
@@ -77,16 +80,21 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 				getRequest().setAttribute("successMsg", nome_competicao+" criada com sucesso\n"+credenciais);
 				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
-				getRequest().setAttribute("errorMsg", callback);
-				getRequest().setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
-				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				errMsg = callback;
 			}
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch  (ServletException|IOException e) {
-			e.printStackTrace();
+			errMsg = "Erro inesperado no servidor";
 		} finally {
 			try {
 				if (con != null) con.close();
-			} catch (SQLException e) {
+				if (errMsg != null) {
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "incluirLocaisCompeticao.jsp");
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				}
+			} catch (SQLException|ServletException|IOException e) {
 				e.printStackTrace();
 			}
 		}

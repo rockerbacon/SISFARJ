@@ -19,7 +19,12 @@
 		<button  type="submit"> Filiar associação</button>
 	</form>
 	
-	<a href=""> Alterar filiação de associação</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/listarAssociacao.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<input type="hidden" name="button" value='<button type="submit">Alterar</button>'/>
+		<button  type="submit"> Alterar Filiacao Associacao</button>
+	</form>
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarAssociacao.jsp"/>
@@ -53,7 +58,6 @@
 		<button  type="submit"> Listar locais de competiçao</button>
 	</form>
 	
-	<a href=""> Listar locais de competição</a><br>
 	<a href=""> Criar competição</a><br>
 	<a href=""> Alterar competição</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>

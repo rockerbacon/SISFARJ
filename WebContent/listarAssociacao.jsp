@@ -6,6 +6,7 @@
 <%@ page import="java.util.List" %>  
 <%@ page import="database.Associacao" %>  
 <%@ page import="java.util.Comparator" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 
 <html>
 <head>
@@ -18,11 +19,11 @@
    <a class="navbar-brand" href="#">SISFARJ</a>      
 </nav>
 
-
 	<table style="width:100%">
 		<tr>
 			<th>Matricula</th>
 			<th>Nome</th>
+			<th></th>
 		</tr>
 		<%
 		List<Associacao> assocs = Associacao.listar();
@@ -32,6 +33,25 @@
 	    	<tr>
 	    		<td><%=assoc.get_matricula()%></td>
 	    		<td><%=assoc.get_nome()%></td>
+	    		<td>
+	    			<form action="alterarFiliacaoAssociacao.jsp"/>
+	    				<input type="hidden" name="asso_matricula" value="<%=assoc.get_matricula()%>"/>
+	    				<input type="hidden" name="asso_nome" value="<%=assoc.get_nome() %>"/>
+	    				<input type="hidden" name="asso_sigla" value="<%=assoc.get_sigla() %>"/>
+	    				<input type="hidden" name="asso_endereco" value="<%=assoc.get_endereco() %>"/>
+	    				<input type="hidden" name="asso_telefone" value="<%=assoc.get_telefone() %>"/>
+	    				<input type="hidden" name="asso_oficio" value="<%=assoc.get_oficio() %>"/>
+	    				<input type="hidden" name="asso_data" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(assoc.get_data()) %>"/>
+	    				<%request.getSession().setAttribute("asso_matricula", assoc.get_matricula()); %>
+						<%request.getSession().setAttribute("asso_nome", assoc.get_nome());%>
+						<%request.getSession().setAttribute("asso_sigla", assoc.get_sigla()); %>
+						<%request.getSession().setAttribute("asso_endereco", assoc.get_endereco()); %>
+						<%request.getSession().setAttribute("asso_telefone", assoc.get_telefone()); %>
+						<%request.getSession().setAttribute("asso_oficio", assoc.get_oficio()); %>
+						<%request.getSession().setAttribute("asso_data", assoc.get_data()); %>
+	    				${button}
+	    			</form>
+	    		</td>
 	    	</tr>
 	    <%
 	    }

@@ -54,6 +54,8 @@ public class CadastrarAtletaCommand extends Command {
 			//System.out.println(this.comprovante_pagamento);
 			this.receiver = new Secretario(con);
 			
+		}catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch (NumberFormatException e) {
 			errMsg = "Passagem de caracteres em campo numerico";
 		} catch (ParseException e) {
@@ -64,6 +66,7 @@ public class CadastrarAtletaCommand extends Command {
 			try {
 				if (errMsg != null) {
 					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "cadastroAtleta.jsp");
 					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (ServletException|IOException e) {
@@ -76,6 +79,7 @@ public class CadastrarAtletaCommand extends Command {
 	public void execute() {
 		String callback = "";
 		String credenciais = "";
+		String errMsg = null;
 		try {
 			callback = this.receiver.cadastrarAtleta(numero, data_oficio, nome, data_nascimento, data_entrada, matricula_atleta, categoria, comprovante_pagamento);
 			if (callback.contains("SUCCESS")) {
@@ -84,21 +88,23 @@ public class CadastrarAtletaCommand extends Command {
 				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
 				getRequest().setAttribute("errorMsg", callback);
+				getRequest().setAttribute("paginaRedirecionamento", "cadastroAtleta.jsp");
 				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				
 			}
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch  (ServletException|IOException e) {
-			e.printStackTrace();
-			try {
-				getRequest().setAttribute("errorMsg", "Erro inesperado no servidor");
-				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
-			} catch (ServletException|IOException e2) {
-				e.printStackTrace();
-			}
+			errMsg = "Erro inesperado no servidor";
 		} finally {
 			try {
 				if (con != null) con.close();
-			} catch (SQLException e) {
+				if (errMsg != null) {
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "cadastroAtleta.jsp");
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				}
+			} catch (SQLException|ServletException|IOException e) {
 				e.printStackTrace();
 			}
 		}

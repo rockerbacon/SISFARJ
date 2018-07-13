@@ -26,6 +26,8 @@ public class ValidationCommand extends Command {
 			this.senha = getRequest().getParameter("senha");
 			this.acessoNecessario = Byte.parseByte((String)getRequest().getSession().getAttribute("accessLevel"));
 			this.receiver = new ValidationReceiver(con);
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -46,22 +48,28 @@ public class ValidationCommand extends Command {
 
 	@Override
 	public void execute() {
-		String callback;
+		String callback = null;
+		String errMsg = null;
 		try {
 			if ( (callback = this.receiver.validate(this.login, this.senha, this.acessoNecessario)).equals("SUCCESS") ) {
 				String proxPag = (String)getRequest().getSession().getAttribute("afterLogin");
 				getRequest().getRequestDispatcher(proxPag).forward(getRequest(), getResponse());
 			} else {
-				this.getRequest().setAttribute("errorMsg", callback);
-				getRequest().setAttribute("paginaRedirecionamento", "login.jsp");
-				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				errMsg = callback;
 			}
-		} catch (IOException|ServletException e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
+		} catch  (ServletException|IOException e) {
+			errMsg = "Erro inesperado no servidor";
 		} finally {
 			try {
 				if (con != null) con.close();
-			} catch (SQLException e) {
+				if (errMsg != null) {
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "login.jsp");
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				}
+			} catch (SQLException|ServletException|IOException e) {
 				e.printStackTrace();
 			}
 		}

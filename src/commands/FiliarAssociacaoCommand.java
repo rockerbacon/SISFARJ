@@ -43,6 +43,8 @@ public class FiliarAssociacaoCommand extends Command {
 			this.comprovante_pagamento = Integer.parseInt(getRequest().getParameter("numComprovantePag"));
 			this.receiver = new Secretario(con);
 			
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch (NumberFormatException e) {
 			errMsg = "Passagem de caracteres em campo numerico";
 		} catch (ParseException e) {
@@ -53,6 +55,7 @@ public class FiliarAssociacaoCommand extends Command {
 			try {
 				if (errMsg != null) {
 					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "filiarAssoc.jsp");
 					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
 				}
 			} catch (IOException|ServletException e2) {
@@ -65,6 +68,7 @@ public class FiliarAssociacaoCommand extends Command {
 	public void execute() {
 		String callback = "";
 		String credenciais = "";
+		String errMsg = null;
 		try {
 			callback = this.receiver.lancarFiliacao(numero_oficio, data_oficio, nome_associacao, sigla_associacao, endereco_associacao, tel_associacao, comprovante_pagamento);
 			if (callback.contains("SUCCESS")) {
@@ -72,22 +76,22 @@ public class FiliarAssociacaoCommand extends Command {
 				getRequest().setAttribute("successMsg", nome_associacao+" criada com sucesso\n"+credenciais);
 				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
-				getRequest().setAttribute("errorMsg", callback);
-				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				errMsg = callback;
 				
 			}
+		} catch (NullPointerException e) {
+			errMsg = "Campo nao preenchido";
 		} catch  (ServletException|IOException e) {
-			e.printStackTrace();
-			try {
-				getRequest().setAttribute("errorMsg", "Erro inesperado no servidor");
-				getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
-			} catch (ServletException|IOException e2) {
-				e.printStackTrace();
-			}
+			errMsg = "Erro inesperado no servidor";
 		} finally {
 			try {
-				if (this.con != null) this.con.close();
-			} catch (SQLException e) {
+				if (con != null) con.close();
+				if (errMsg != null) {
+					getRequest().setAttribute("errorMsg", errMsg);
+					getRequest().setAttribute("paginaRedirecionamento", "filiarAssoc.jsp");
+					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
+				}
+			} catch (SQLException|ServletException|IOException e) {
 				e.printStackTrace();
 			}
 		}

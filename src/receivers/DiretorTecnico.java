@@ -30,7 +30,8 @@ public class DiretorTecnico extends Secretario {
 				Local local1 = new Local(nome_competicao , endereco_competicao, (short)25);
 				mapper.create(local1);
 				
-			}else if(piscina_50_metros == 1) {
+			}
+			if(piscina_50_metros == 1) {
 				Local local2 = new Local(nome_competicao , endereco_competicao, (short)50);
 				mapper.create(local2);
 			}
@@ -56,24 +57,6 @@ public class DiretorTecnico extends Secretario {
 
 	public DiretorTecnico (Connection con) {
 		super(con);
-	}
-	
-	public List<Local> listarLocalDeCompeticao() {
-		List<Local> lista = null;	
-		
-		try {
-			Mapper mapper = new Mapper(getCon());
-			lista = mapper.read(-1, Local.class);
-			for(int i=0;i<lista.size();i++){
-			    System.out.println(lista.get(i).get_nome());
-			} 
-			
-			return lista;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return lista;
 	}
 	
 }

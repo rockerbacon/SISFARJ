@@ -36,8 +36,8 @@
 			<input type="date" class="form-control" name="data_entrada" id="dtEntrada" placeholder="Data de entrada">
 		</div>
 		<div class="form-group">
-			<label for="exampleInputEmail1">Matrícula</label>
-			<input type="text" class="form-control" name="matricula_atleta" id="matricula_atleta" placeholder="Matrícula">
+			<label for="exampleInputEmail1">Matrícula da associacao</label>
+			<input type="text" class="form-control" name="matricula_atleta" id="matricula_atleta" placeholder="Matrícula da Associacao">
 		</div>
 		<div class="form-group">
 			<select class="custom-select" name="categoria">
@@ -48,7 +48,7 @@
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Comprovante Pagamento</label>
-			<input type="text" class="form-control" name="comprovante_pagamento" id="comprovante_pagamento" placeholder="Matrícula">
+			<input type="text" class="form-control" name="comprovante_pagamento" id="comprovante_pagamento" placeholder="Comprovante">
 		</div>
 
 		<button type="submit" class="btn btn-primary">Enviar</button>
