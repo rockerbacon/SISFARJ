@@ -18,7 +18,11 @@
 		<button  type="submit"> Filiar associação</button>
 	</form>
 	<a href=""> Alterar filiação de associação</a><br>
-	<a href=""> Listar associação</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="ListarAssociacaoServlet"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<button  type="submit"> Listar associação</button>
+	</form>
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/cadastroAtleta.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>

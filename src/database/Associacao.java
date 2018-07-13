@@ -1,6 +1,11 @@
 package database;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
+
+import java.sql.Connection;
 
 @Mapper.UseTables({Associacao.TABLE_NAME})
 public class Associacao {
@@ -26,6 +31,14 @@ public class Associacao {
 	Date asso_data;
 	
 	public Associacao () {}
+	
+	public static List<Associacao> listar() throws SQLException, IOException {
+		Connection con = DbConnection.connect();
+		Mapper mapper = new Mapper(con);
+		List<Associacao> lista = mapper.read(-1, Associacao.class);
+		con.close();
+		return lista;
+	}
 
 	public Associacao(String asso_nome, String asso_sigla, String asso_endereco, int asso_telefone, int asso_oficio, Date asso_data) {
 		super();
