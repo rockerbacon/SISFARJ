@@ -13,18 +13,29 @@
 </nav>
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Incluir locais de competição</h4>
-	<form>
+	<form action = "InvokerServlet" method ="post">
+		<input type="hidden" name="command" value="IncluirLocaisCompeticaoCommand"/>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Nome</label>
-			<input type="text" class="form-control" name="nomeAssoc" id="nomeAssoc" placeholder="Nome">
+			<input type="text" class="form-control" name="nomeCompeticao" id="nomeCompeticao" placeholder="Nome">
 		</div>		
 		<div class="form-group">
 			<label for="exampleInputEmail1">Endereço</label>
-			<input type="text" class="form-control" name="matriculaAtleta" id="matriculaAtleta" placeholder="Matrícula">
+			<input type="text" class="form-control" name="enderecoCompeticao" id="enderecoCompeticao" placeholder="Endereço">
 		</div>
 		<div class="form-group">
-			<label for="exampleInputEmail1">Piscina</label>
-			<input type="text" class="form-control" name="comprovante" id="comprovante" placeholder="Comprovante">
+			<label>Piscina de 25 metros</label>
+			<select class="form-control" name="piscina25metros">
+				<option value ="1">Sim</option>
+				<option value ="0">Não</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>Piscina de 50 metros</label>
+			<select class="form-control" name="piscina50metros">
+				<option value="1">Sim</option>
+				<option value="0">Não</option>
+			</select>
 		</div>
 
 		<button type="submit" value="Cadastrar" class="btn btn-primary">Cadastrar</button>

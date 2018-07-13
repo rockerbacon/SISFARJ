@@ -60,7 +60,6 @@ public class CadastrarAtletaCommand extends Command {
 			errMsg = "Data invalida";
 		} catch (SQLException e) {
 			errMsg = "Nao foi possivel conectar ao database";
-		
 		} finally {
 			try {
 				if (errMsg != null) {

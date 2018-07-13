@@ -13,6 +13,10 @@ public class Competicao {
 	@Mapper.ForeignKey(references=Local.TABLE_NAME)
 	String loca_nome;
 	
+	@Mapper.PrimaryKey
+	@Mapper.ForeignKey(references=Local.TABLE_NAME)
+	short loca_tam_pisc;
+	
 	String comp_nome;
 	
 	public Competicao() {}
@@ -34,6 +38,10 @@ public class Competicao {
 
 	public String get_nome() {
 		return comp_nome;
+	}
+	
+	public short get_loca_tam_pisc() {
+		return loca_tam_pisc;
 	}
 
 	
