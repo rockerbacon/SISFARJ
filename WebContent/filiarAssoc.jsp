@@ -24,7 +24,7 @@
 		</div>	
 		<div class="form-group">
 			<label for="nomeAssoc">Nome</label>
-			<input type="text" class="form-control" name="nomeAssoc" id="nomeAssoc" placeholder="Nome" value="<%=request.getAttribute("nome")%>">
+			<input type="text" class="form-control" name="nomeAssoc" id="nomeAssoc" placeholder="Nome">
 		</div>
 		<div class="form-group">
 			<label for="siglaAssoc">Sigla</label>
