@@ -1,5 +1,6 @@
 package commands;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,6 +29,8 @@ public class CriarCompeticaoCommand implements Command{
 			String data;
 			data = request.getParameter("dataCompeticao");
 			this.data_competicao = dt.parse(data);
+		}catch (ParseException e){
+			
 		}
 	}
 	

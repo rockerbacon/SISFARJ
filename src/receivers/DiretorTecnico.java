@@ -1,11 +1,13 @@
 package receivers;
 
 import java.sql.Connection;
+
 import java.sql.SQLException;
 
 import database.DbConnection;
 import database.Local;
 import database.Mapper;
+
 
 public class DiretorTecnico extends Secretario {
 	
@@ -47,4 +49,8 @@ public class DiretorTecnico extends Secretario {
 	}
 	
 
+	public DiretorTecnico (Connection con) {
+		super(con);
+	}
+	
 }

@@ -1,11 +1,14 @@
 package commands;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.DbConnection;
 import receivers.DiretorTecnico;
 
 public class IncluirLocaisCompeticaoCommand implements Command {
@@ -19,13 +22,17 @@ public class IncluirLocaisCompeticaoCommand implements Command {
 	private HttpServletRequest request;
 	private HttpServletResponse response;
 	
-	public IncluirLocaisCompeticaoCommand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private Connection con;
+	
+	
+	public IncluirLocaisCompeticaoCommand(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		try {
 			this.nome_competicao = request.getParameter("nomeCompeticao");
 			this.endereco_competicao = request.getParameter("enderecoCompeticao");
 			this.piscina_25_metros = Integer.parseInt(request.getParameter("piscina25metros"));//System.out.println(request.getParameter("piscina25metros"));
 			this.piscina_50_metros = Integer.parseInt(request.getParameter("piscina50metros"));
-			this.receiver = new DiretorTecnico();
+			this.con = DbConnection.connect();
+			this.receiver = new DiretorTecnico(con);
 			this.request = request;
 			this.response = response;
 			

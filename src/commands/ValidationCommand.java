@@ -1,11 +1,14 @@
 package commands;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.DbConnection;
 import receivers.ValidationReceiver;
 
 public class ValidationCommand implements Command {
@@ -16,21 +19,30 @@ public class ValidationCommand implements Command {
 	private ValidationReceiver receiver;
 	private HttpServletRequest request;
 	private HttpServletResponse response;
+	private Connection con;
 	
 	public ValidationCommand(HttpServletRequest request, HttpServletResponse response) {
+		String errMsg = null;
 		try {
+			con = DbConnection.connect();
 			this.login = request.getParameter("login");
 			this.senha = request.getParameter("senha");
 			this.acessoNecessario = Byte.parseByte((String)request.getSession().getAttribute("accessLevel"));
-			this.receiver = new ValidationReceiver();
+			this.receiver = new ValidationReceiver(con);
 			this.request = request;
 			this.response = response;
 		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			errMsg = "Nao foi possivel conectar a base de dados";
+		} finally {
 			try {
-				request.setAttribute("errorMsg", "Matricula deve conter somente numeros");
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
-			} catch (IOException|ServletException e2) {
-				e2.printStackTrace();
+				if (errMsg != null) {
+					request.setAttribute("errorMsg", errMsg);
+					request.getRequestDispatcher("/error.jsp").forward(request, response);
+				}
+			} catch (IOException|ServletException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -48,6 +60,12 @@ public class ValidationCommand implements Command {
 			}
 		} catch (IOException|ServletException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (con != null) con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

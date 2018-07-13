@@ -3,18 +3,22 @@ package receivers;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import database.DbConnection;
 import database.Mapper;
 import database.Mapper.Filter;
 import database.Usuario;
 import java.util.List;
 
 public class ValidationReceiver {
+	
+	Connection con;
+	
+	public ValidationReceiver (Connection con) {
+		this.con = con;
+	}
 
 	public String validate (String login, String senha, byte acessoNecessario) {
 		String callback = null;
 		try {
-			Connection con = DbConnection.connect();
 			Mapper mapper = new Mapper(con);
 			
 		
@@ -35,7 +39,7 @@ public class ValidationReceiver {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			callback = "Ocorreu um erro inesperado no servidor";
+			callback = "Ocorreu um erro na base de dados";
 		}
 		return callback;
 	}

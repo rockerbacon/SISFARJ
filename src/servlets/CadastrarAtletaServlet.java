@@ -7,11 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import commands.Command;
 import commands.CadastrarAtletaCommand;
-import commands.ValidationCommand;
+import commands.Command;
 import invokers.CadastrarAtletaInv;
-import invokers.LoginValidation;
 
 /**
  * Servlet implementation class CadastrarAtletaServlet
