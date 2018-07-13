@@ -21,7 +21,7 @@
 		</div>	
 		<div class="form-group">
 			<label for="Data">Data Ofício</label>
-			<input type="date" class="form-control" name="dataOficio" id="dataOficio" placeholder="Data Ofício">
+			<input type="text" class="form-control" name="dataOficio" id="dataOficio" placeholder="Data Ofício">
 		</div>	
 		<div class="form-group">
 			<label for="nomeAssoc">Nome</label>
@@ -44,7 +44,7 @@
 			<input type="text" class="form-control" name="numComprovantePag" id="numComprovantePag" placeholder="Número do comprovante de pagamento">
 		</div>
 
-		<button type="submit" value="Cadastrar" class="btn btn-primary">Cadastrar</button>
+		<button type="submit" value="Cadastrar" class="btn btn-primary" id="botaoCadastro">Cadastrar</button>
 	</form>
 </div>
 

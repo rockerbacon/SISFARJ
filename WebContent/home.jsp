@@ -16,7 +16,7 @@
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/filiarAssoc.jsp"/>
 		<input type="hidden" name="accessLevel" value="0"/>
-		<button  type="submit"> Filiar associação</button>
+		<button  type="submit" id="filiar"> Filiar associação</button>
 	</form>
 	
 	<form action="LoginRedirectServlet">

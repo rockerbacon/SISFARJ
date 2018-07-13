@@ -21,7 +21,7 @@
 		<label for="inputPassword" class="sr-only">Password</label>
 		<input type="password" name="senha" id="inputPassword" class="form-control" placeholder="Senha" required="">
       
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+		<button class="btn btn-lg btn-primary btn-block" type="submit" id="submitButton">Login</button>
       
 		<p class="mt-5 mb-3 text-muted">© 2018</p>
 	</form>
