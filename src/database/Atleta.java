@@ -1,6 +1,10 @@
 package database;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 @Mapper.UseTables({Atleta.TABLE_NAME})
 public class Atleta {
@@ -41,6 +45,14 @@ public class Atleta {
 		this.atle_associacao_data = atle_associacao_data;
 		this.atle_nascimento_data = atle_nascimento_data;
 		this.asso_matricula = asso_matricula;
+	}
+	
+	public static List<Atleta> listar() throws SQLException, IOException {
+		Connection con = DbConnection.connect();
+		Mapper mapper = new Mapper(con);
+		List<Atleta> lista = mapper.read(-1, Atleta.class);
+		con.close();
+		return lista;
 	}
 
 

@@ -96,6 +96,24 @@ public class Secretario extends Pessoa {
 		}
 		return callback;
 	}
+	
+	public String alterarCadastroAtleta(String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
+			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula) {
+		String callback = null;
+		try {
+			Atleta atleta = new Atleta(atle_nome, atle_categoria, atle_numero, atle_indice, atle_oficio_data,
+					atle_associacao_data, atle_nascimento_data, asso_matricula);
+			Mapper mapper = new Mapper(con);
+			
+			mapper.update(atleta);
+			
+			callback = "SUCCESS";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			callback = "Erro inesperado no servidor";
+		}
+		return callback;
+	}
 
 	public Connection getCon() {
 		return con;
@@ -104,5 +122,7 @@ public class Secretario extends Pessoa {
 	public void setCon(Connection con) {
 		this.con = con;
 	}
+	
+	
 	
 }
