@@ -49,6 +49,11 @@ public class Mapper {
 		String[] value();
 	}
 	
+	public static interface Script<T> {
+		public T mapTo(T object);
+		public Script<T> mapFrom(T object);
+	}
+	
 	protected Connection connection;
 	
 	/**

@@ -12,7 +12,7 @@ public class DbBatch {
 			
 		//ordem da criacao tem importancia
 		try {
-			mapper.create(Associacao.class);
+			mapper.create(AssociacaoScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -22,7 +22,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.create(Atleta.class);
+			mapper.create(AtletaScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -108,7 +108,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.delete(Atleta.class);
+			mapper.delete(AtletaScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -118,7 +118,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.delete(Associacao.class);
+			mapper.delete(AssociacaoScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}

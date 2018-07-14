@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import database.Associacao;
+import database.AssociacaoScript;
 import database.Local;
 import database.Mapper;
 

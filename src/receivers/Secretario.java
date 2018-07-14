@@ -2,13 +2,20 @@ package receivers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import database.Associacao;
-import database.Atleta;
+
+import domain.Associacao;
+import domain.Atleta;
+
+import database.AssociacaoScript;
+import database.AtletaScript;
 import database.Mapper;
 import database.Usuario;
+
+import java.io.IOException;
 
 public class Secretario extends Pessoa {
 	
@@ -26,7 +33,7 @@ public class Secretario extends Pessoa {
 		try {
 			Mapper mapper = new Mapper(getCon());
 			
-			List<Associacao> max = mapper.read(-1, Associacao.class);
+			List<Associacao> max = AssociacaoScript.listar();
 			int maxSeq = 0;
 			if (max.size() != 0) {
 				max.sort((a, b) ->  b.get_matricula()-a.get_matricula());
@@ -35,12 +42,12 @@ public class Secretario extends Pessoa {
 			
 			assoc.set_matricula(maxSeq);
 			
-			mapper.create(assoc);
+			mapper.create(new AssociacaoScript().mapFrom(assoc));
 			mapper.create(tecnico);
 			
 			callback = "SUCCESS Usuario do tecnico: "+tecnico.get_login()+"\nSenha: "+tecnico.get_senha();
 			
-		} catch (SQLException e) {
+		} catch (SQLException|IOException e) {
 			e.printStackTrace();
 			callback = "Erro inesperado no servidor";
 		}
@@ -59,16 +66,21 @@ public class Secretario extends Pessoa {
 		try {
 			Mapper mapper = new Mapper(getCon());
 			
-			List<Atleta> max = mapper.read(-1, Atleta.class);
+			List<AtletaScript> max = mapper.read(-1, AtletaScript.class);
+			ArrayList<Atleta> atleList = new ArrayList<Atleta>(max.size());
+			for (AtletaScript script : max) {
+				atleList.add(script.mapTo(new Atleta()));
+			}
+			
 			int maxSeq = 0;
-			if (max.size() != 0) {
-				max.sort((a, b) ->  b.get_matricula()-a.get_matricula());
-				maxSeq = max.get(0).get_matricula()+1;
+			if (atleList.size() != 0) {
+				atleList.sort((a, b) ->  b.get_matricula()-a.get_matricula());
+				maxSeq = atleList.get(0).get_matricula()+1;
 			}
 			
 			atleta.set_matricula(maxSeq);
 			
-			mapper.create(atleta);
+			mapper.create(new AtletaScript().mapFrom(atleta));
 			//mapper.create(tecnico);
 			
 			callback = "SUCCESS Matricula atleta: "+atleta.get_matricula();
@@ -88,7 +100,7 @@ public class Secretario extends Pessoa {
 			asso.set_matricula(matricula);
 			Mapper mapper = new Mapper(con);
 			
-			mapper.update(asso);
+			mapper.update(new AssociacaoScript().mapFrom(asso));
 			callback = "SUCCESS";
 		} catch (SQLException e) {
 			e.printStackTrace();

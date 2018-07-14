@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
   
 <%@ page import="java.util.List" %>  
-<%@ page import="database.Associacao" %>  
+<%@ page import="database.AssociacaoScript" %>  
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 
@@ -26,10 +26,10 @@
 			<th></th>
 		</tr>
 		<%
-		List<Associacao> assocs = Associacao.listar();
-		assocs.sort(new Comparator<Associacao>() { @Override public int compare(Associacao a, Associacao b) { return a.get_nome().compareTo(b.get_nome()); } });
-		for(Associacao assoc : assocs) {
-	    %>
+			List<AssociacaoScript> assocs = AssociacaoScript.listar();
+				assocs.sort(new Comparator<AssociacaoScript>() { @Override public int compare(AssociacaoScript a, AssociacaoScript b) { return a.get_nome().compareTo(b.get_nome()); } });
+				for(AssociacaoScript assoc : assocs) {
+		%>
 	    	<tr>
 	    		<td><%=assoc.get_matricula()%></td>
 	    		<td><%=assoc.get_nome()%></td>

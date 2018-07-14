@@ -7,7 +7,7 @@ public class Participacao {
 	public static final String TABLE_NAME = "PARTICIPACAO";
 	
 	@Mapper.PrimaryKey
-	@Mapper.ForeignKey(references=Atleta.TABLE_NAME)
+	@Mapper.ForeignKey(references=AtletaScript.TABLE_NAME)
 	int atle_matricula;
 	
 	@Mapper.PrimaryKey
