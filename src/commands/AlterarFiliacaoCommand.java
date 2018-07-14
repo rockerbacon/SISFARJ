@@ -13,9 +13,8 @@ import javax.servlet.ServletException;
 import database.DbConnection;
 import receivers.Secretario;
 
-public class AlterarFiliacaoCommand extends Command {
+public class AlterarFiliacaoCommand implements Command {
 
-	private Connection con;
 	int asso_matricula;
 	String asso_nome;
 	String asso_sigla;
@@ -23,48 +22,20 @@ public class AlterarFiliacaoCommand extends Command {
 	int asso_telefone;
 	int asso_oficio;
 	Date asso_data;
-	Secretario receiver;
 	
 	
-	public void AlterarFiliacaoCommand () {}
+	
 
-	@Override
-	public void init() {
-		String errMsg = null;
-		try {
-			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-			con = DbConnection.connect();
-			
-			this.asso_matricula = Integer.parseInt(getRequest().getParameter("asso_matricula"));
-			this.asso_nome = getRequest().getParameter("asso_nome");
-			this.asso_sigla = getRequest().getParameter("asso_sigla");
-			this.asso_endereco = getRequest().getParameter("asso_endereco");
-			this.asso_telefone = Integer.parseInt(getRequest().getParameter("asso_telefone"));
-			this.asso_oficio = Integer.parseInt(getRequest().getParameter("asso_oficio"));
-			this.asso_data = dt.parse(getRequest().getParameter("asso_data"));
-			
-			this.receiver = new Secretario(con);
-			
-		} catch (NullPointerException e) {
-			errMsg = "Campo nao preenchido";
-		} catch (ParseException e) {
-			errMsg = "Data invalida";
-		} catch (NumberFormatException e) {
-			errMsg = "Passagem de caracteres em campo numerico";
-		} catch (SQLException e) { 
-			errMsg = "Nao foi possivel conectar a base de dados";
-		}finally {
-			try {
-				if (errMsg != null) {
-					getRequest().setAttribute("errorMsg", errMsg);
-					getRequest().setAttribute("paginaRedirecionamento", "alterarFiliacaoAssociacao.jsp");
-					getRequest().getRequestDispatcher("/error.jsp").forward(getRequest(), getResponse());
-				}
-			} catch (ServletException|IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
+	public AlterarFiliacaoCommand(int asso_matricula, String asso_nome, String asso_sigla,
+			String asso_endereco, int asso_telefone, int asso_oficio, Date asso_data) {
+		super();
+		this.asso_matricula = asso_matricula;
+		this.asso_nome = asso_nome;
+		this.asso_sigla = asso_sigla;
+		this.asso_endereco = asso_endereco;
+		this.asso_telefone = asso_telefone;
+		this.asso_oficio = asso_oficio;
+		this.asso_data = asso_data;
 	}
 
 	@Override

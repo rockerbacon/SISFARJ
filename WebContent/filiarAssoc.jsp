@@ -13,8 +13,7 @@
 </nav>
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Filiar associação</h4>
-	<form action="InvokerServlet" method="POST">
-		<input type="hidden" name="command" value="FiliarAssociacaoCommand"/>
+	<form action="FiliarAssociacaoServlet" method="POST">
 		<div class="form-group">
 			<label for="nOficio">Número de ofício</label>
 			<input type="text" class="form-control" name="nOficio" id="nOficio" placeholder="Número de ofício">

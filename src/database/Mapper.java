@@ -56,6 +56,8 @@ public class Mapper {
 	
 	protected Connection connection;
 	
+	
+	protected Mapper() {}
 	/**
 	 * Inicializa um mapper para a conexao especificada
 	 * @param connection: Conexao utilizada pelo mapper

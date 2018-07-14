@@ -4,20 +4,30 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import java.text.ParseException;
+
+import java.text.SimpleDateFormat;
+
+import domain.Associacao;
+
 public class DbBatch {
 	
 	public static void upDatabase (Connection con) {
+		SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
 		Mapper mapper = new Mapper(con);
-		Usuario secretario = new Usuario("admin", (byte)0, "admin");
+		Associacao sisfarj = null;
+		try {
+			sisfarj = new Associacao("admin", "SISFARJ", "Rural", 0, 0, dt.parse("14/07/2018"));
+			sisfarj.set_matricula(0);
+			sisfarj.set_senha("admin");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 			
 		//ordem da criacao tem importancia
 		try {
 			mapper.create(AssociacaoScript.class);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		try {
-			mapper.create(Usuario.class);
+			if (sisfarj != null) mapper.create(new AssociacaoScript().mapFrom(sisfarj));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -58,11 +68,6 @@ public class DbBatch {
 		}
 		try {
 			mapper.create(ProvaCompeticao.class);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		try {
-			mapper.create(secretario);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -109,11 +114,6 @@ public class DbBatch {
 		}
 		try {
 			mapper.delete(AtletaScript.class);
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		try {
-			mapper.delete(Usuario.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}

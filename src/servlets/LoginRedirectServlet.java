@@ -27,7 +27,6 @@ public class LoginRedirectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().setAttribute("afterLogin", request.getParameter("afterLogin")); //diz para qual pagina direcionar apos login
-		request.getSession().setAttribute("accessLevel", request.getParameter("accessLevel"));
 		request.getSession().setAttribute("button", request.getParameter("button"));
 		request.getRequestDispatcher("/login.jsp").forward(request, response);
 	}

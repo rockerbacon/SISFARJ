@@ -7,12 +7,9 @@ public class Associacao {
 	
 	int asso_matricula;
 	
-	
 	String asso_nome;
 	
-	
 	String asso_sigla;
-	
 	
 	String asso_endereco;
 	
@@ -21,6 +18,10 @@ public class Associacao {
 	int asso_oficio;
 	
 	Date asso_data;
+	
+	String asso_senha;
+	
+	int asso_comprovante_pagamento;
 	
 	public Associacao() {}
 	
@@ -102,6 +103,22 @@ public class Associacao {
 
 	public void set_data(Date asso_data) {
 		this.asso_data = asso_data;
+	}
+
+	public String get_senha() {
+		return asso_senha;
+	}
+
+	public void set_senha(String asso_senha) {
+		this.asso_senha = asso_senha;
+	}
+	
+	public int get_comprovante_pagamento () {
+		return this.asso_comprovante_pagamento;
+	}
+	
+	public void set_comprovante_pagamento (int asso_comprovante_pagamento) {
+		this.asso_comprovante_pagamento = asso_comprovante_pagamento;
 	}
 	
 }
