@@ -11,7 +11,11 @@ public class Classe {
 	
 	int clas_idade_max;
 
-	public Classe() {}
+	public Classe(String clas_nome, int clas_idade_min, int clas_idade_max) {
+		this.clas_nome = clas_nome;
+		this.clas_idade_min = clas_idade_min;
+		this.clas_idade_max = clas_idade_max;
+	}
 
 
 	public String get_nome() {
