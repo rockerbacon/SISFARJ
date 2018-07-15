@@ -1,12 +1,13 @@
 package database;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import database.Mapper.Script;
+import java.text.ParseException;
 import domain.Atleta;
 
 @Mapper.UseTables({AtletaScript.TABLE_NAME})
-public class AtletaScript implements Mapper.Script<Atleta> {
+public class AtletaScript implements Mapper.Script<Atleta>, MapperMocker.Script {
 	
 	public static final String TABLE_NAME = "ATLETA";
 	
@@ -27,10 +28,17 @@ public class AtletaScript implements Mapper.Script<Atleta> {
 
 	Date atle_nascimento_data;
 	
+	int atle_comprovante_pagamento;
+	
 	@Mapper.ForeignKey(references=AssociacaoScript.TABLE_NAME)
 	int asso_matricula;
 	
 	public AtletaScript () {}
+	
+	//suprime diferenca entre camada de dados e dominio
+	public AtletaScript (int comprovante_pagamento) {
+		this.atle_comprovante_pagamento = comprovante_pagamento;
+	}
 	
 
 	@Override
@@ -49,7 +57,7 @@ public class AtletaScript implements Mapper.Script<Atleta> {
 	}
 
 	@Override
-	public Script<Atleta> mapFrom(Atleta object) {
+	public AtletaScript mapFrom(Atleta object) {
 		this.asso_matricula = object.get_asso_matricula();
 		this.atle_associacao_data = object.get_associacao_data();
 		this.atle_categoria = object.get_categoria();
@@ -60,6 +68,21 @@ public class AtletaScript implements Mapper.Script<Atleta> {
 		this.atle_numero = object.get_numero();
 		this.atle_oficio_data = object.get_oficio_data();
 		return this;
+	}
+	
+	@Override
+	public Object mock() {
+		AtletaScript mockObj = null;
+		try {
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+			mockObj = new AtletaScript().mapFrom(new Atleta("atleta", "m", 0, 0, dt.parse("01/01/2018"), dt.parse("01/01/2018"), dt.parse("01/01/2018"), 0));
+			mockObj.atle_comprovante_pagamento = 0;
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return mockObj;
+		
 	}
 	
 }

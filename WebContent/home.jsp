@@ -15,7 +15,6 @@
 
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/filiarAssoc.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit" id="filiar"> Filiar associação</button>
 	</form>
 	
@@ -27,13 +26,11 @@
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarAssociacao.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Listar Associacao</button>
 	</form>
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/cadastroAtleta.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Cadastrar atleta</button>
 	</form>
 	
@@ -45,7 +42,6 @@
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/incluirLocaisCompeticao.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Incluir locais de competição</button>
 	</form>
 	
@@ -53,7 +49,6 @@
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarLocaisDeCompeticao.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<button  type="submit"> Listar locais de competiçao</button>
 	</form>
 	

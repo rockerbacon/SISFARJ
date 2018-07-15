@@ -92,6 +92,20 @@ public class InvokerServlet extends HttpServlet {
 					}
 						
 					break;
+					case "CADASTRAR ATLETA":
+					{
+						int numero = pc.getInt("numero");;
+						Date data_oficio = pc.getDate("data_oficio", "dd/MM/yyyy");
+						String nome = pc.getString("nome");
+						Date data_nascimento = pc.getDate("data_nascimento", "dd/MM/yyyy");
+						Date data_entrada = pc.getDate("data_entrada", "dd/MM/yyyy");
+						int matricula_atleta = pc.getInt("matricula_atleta");
+						String categoria = pc.getString("categoria");
+						int comprovante_pagamento = pc.getInt("comprovante_pagamento");
+						
+						cmd = new CadastrarAtletaCommand(mapper, numero, data_oficio, nome, data_nascimento, data_entrada, matricula_atleta, categoria, comprovante_pagamento);
+					}
+					break;
 					default:
 						errMsg = "Nao foi possivel encontrar command "+cmdName;
 						throw new IllegalArgumentException("Command "+cmdName+" does not exist");

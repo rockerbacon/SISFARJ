@@ -37,6 +37,11 @@ public class AssociacaoScript implements Mapper.Script<Associacao>, MapperMocker
 	
 	public AssociacaoScript () {}
 	
+	//suprime diference entre camada de dados e dominio
+	public AssociacaoScript (int comprovante_pagamento) {
+		this.asso_comprovante_pagamento = comprovante_pagamento;
+	}
+	
 	public static String getTableName() {
 		return TABLE_NAME;
 	}
@@ -119,7 +124,6 @@ public class AssociacaoScript implements Mapper.Script<Associacao>, MapperMocker
 		object.set_sigla(asso_sigla);
 		object.set_telefone(asso_telefone);
 		object.set_senha(asso_senha);
-		object.set_comprovante_pagamento(asso_comprovante_pagamento);
 	
 		return object;
 	}
@@ -135,7 +139,6 @@ public class AssociacaoScript implements Mapper.Script<Associacao>, MapperMocker
 			asso_sigla = object.get_sigla();
 			asso_telefone = object.get_telefone();
 			asso_senha = object.get_senha();
-			asso_comprovante_pagamento = object.get_comprovante_pagamento();
 		}
 		return this;
 	}

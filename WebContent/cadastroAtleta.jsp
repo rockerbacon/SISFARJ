@@ -14,7 +14,8 @@
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Cadastrar atleta</h4>
 	<form action="InvokerServlet" method="POST">
-		<input type="hidden" name="command" value="CadastrarAtletaCommand"/>
+		<input type="hidden" name="command" value="Cadastrar atleta"/>
+		<input type="hidden" name="paginaRedirecionamento" value="cadastroAtleta.jsp"/>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Número de ofício</label>
 			<input type="text" class="form-control" name="numero" id="numero"  placeholder="Número de ofício">

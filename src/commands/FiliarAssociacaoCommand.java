@@ -45,7 +45,6 @@ public class FiliarAssociacaoCommand implements Command {
 	public String execute() {
 		String callback = null;
 		Associacao assoc = new Associacao(nome_associacao, sigla_associacao, endereco_associacao, tel_associacao, numero_oficio, data_oficio);
-		assoc.set_comprovante_pagamento(comprovante_pagamento);
 		
 		try {
 			
@@ -59,7 +58,7 @@ public class FiliarAssociacaoCommand implements Command {
 			assoc.set_matricula(maxSeq);
 			assoc.set_senha(String.format("%04d", new Random().nextInt(9999)));
 			
-			mapper.create(new AssociacaoScript().mapFrom(assoc));
+			mapper.create(new AssociacaoScript(this.comprovante_pagamento).mapFrom(assoc));
 			
 			callback = "SUCCESS Associacao filiada com sucesso<br>Senha: "+assoc.get_senha();
 			
