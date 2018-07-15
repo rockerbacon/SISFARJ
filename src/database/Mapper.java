@@ -552,7 +552,7 @@ public class Mapper {
 	 * @param object: objeto a ser atualizado com os valores a serem atualizados
 	 */
 	
-	public void update (Object object, Object newObj) throws SQLException, IllegalArgumentException {
+	public void update (Object object) throws SQLException, IllegalArgumentException {
 		StringBuilder query = new StringBuilder();
 		Class<?> objClass = object.getClass();
 		Field[] fields = objClass.getDeclaredFields();
@@ -562,17 +562,15 @@ public class Mapper {
 		Iterator<Field> it;
 		int i;
 		Field field;
+		Object param;
 		
 		if (tables.length != 1) {
 			throw new IllegalArgumentException("Object of Type "+objClass.getCanonicalName()+" must only use one table to be updated");	
 		}
-		if (!object.getClass().equals(newObj.getClass())) {
-			throw new IllegalArgumentException("Cannot update value with different types "+object.getClass().getCanonicalName()+" and "+newObj.getClass().getCanonicalName());
-		}
 		
 		query.append("UPDATE ");
 		query.append(tables[0]);
-		query.append(" SET ");
+		query.append(" SET\n");
 		
 		try {
 			
@@ -582,23 +580,30 @@ public class Mapper {
 			if (i == fields.length) {
 				throw new IllegalArgumentException("Class "+objClass.getCanonicalName()+" only has static fields");
 			}
-		
-			query.append("\n\t");
-			query.append(fields[i].getName());
-			query.append("=?");
-			if (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
+			
+			while (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
 				pks.add(fields[i]);
+				i++;
 			}
-			params.add(fields[i].get(newObj));
-			for (i++; i < fields.length; i++) {
-				if (!Modifier.isStatic(fields[i].getModifiers())) {
-					if (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
-						pks.add(fields[i]);
+			
+			if (i != fields.length) {
+		
+				query.append("\n\t");
+				query.append(fields[i].getName());
+				query.append("=?");
+				params.add(fields[i].get(object));
+				for (i++; i < fields.length; i++) {
+					if (!Modifier.isStatic(fields[i].getModifiers())) {
+						if (fields[i].getDeclaredAnnotation(PrimaryKey.class) != null) {
+							pks.add(fields[i]);
+						} else {
+							query.append(",\n\t");
+							query.append(fields[i].getName());
+							query.append("=?");
+							param = fields[i].get(object);
+							params.add(fields[i].get(object));
+						}
 					}
-					query.append(",\n\t");
-					query.append(fields[i].getName());
-					query.append("=?");
-					params.add(fields[i].get(newObj));
 				}
 			}
 			

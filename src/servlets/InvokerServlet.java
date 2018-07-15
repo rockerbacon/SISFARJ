@@ -117,9 +117,8 @@ public class InvokerServlet extends HttpServlet {
 						String loca_nome = pc.getString("loca_nome");
 						String loca_endereco = pc.getString("loca_endereco");
 						short loca_piscinas = (short)pc.getInt("piscinasDisponiveis");
-						String old_nome = pc.getSessionString("loca_nome");
 						
-						cmd = new AlterarLocaisCompeticaoCommand(mapper, old_nome, loca_nome, loca_endereco, loca_piscinas);
+						cmd = new AlterarLocaisCompeticaoCommand(mapper, loca_nome, loca_endereco, loca_piscinas);
 					}
 					break;
 					default:

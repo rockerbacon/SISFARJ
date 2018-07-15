@@ -17,10 +17,7 @@
 	<form action="InvokerServlet" method="POST">
 		<input type="hidden" name="command" value="Alterar locais de competicao"/>
 		
-		<div class="form-group">
-			<label for="NomeLocal">Nome</label>
-			<input type="text" class="form-control" name="loca_nome" id="locaNome" value="<%=request.getSession().getAttribute("loca_nome")%>"/>
-		</div>
+		<input type="hidden" name="loca_nome" id="locaNome" value="<%=request.getSession().getAttribute("loca_nome")%>"/>
 		<div class="form-group">
 			<label for="EnderecoLocal">Endereço</label>
 			<input type="text" class="form-control" name="loca_endereco" id="EndLocal" value="<%=request.getSession().getAttribute("loca_endereco")%>"/>

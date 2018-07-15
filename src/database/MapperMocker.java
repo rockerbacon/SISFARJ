@@ -55,7 +55,7 @@ public class MapperMocker extends Mapper {
 	}
 	
 	@Override
-	public void update(Object object, Object newObj) {
+	public void update(Object object) {
 		//do nothing
 	}
 	
