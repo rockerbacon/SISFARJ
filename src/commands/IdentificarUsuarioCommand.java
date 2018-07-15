@@ -11,6 +11,9 @@ import domain.Associacao;
 
 public class IdentificarUsuarioCommand implements Command {
 	
+	public static final String ERR_SENHA_INCORRETA = "Senha incorreta";
+	public static final String ERR_LOGIN_INCORRETO = "Associacao nao cadastrada";
+	
 	private String login;
 	private String senha;
 	private Mapper mapper;
@@ -30,12 +33,12 @@ public class IdentificarUsuarioCommand implements Command {
 			if (!usual.isEmpty()) {
 				Associacao usua = usual.get(0).mapTo(new Associacao());
 				if (!usua.get_senha().equals(senha)) {
-					callback = "Senha incorreta";
+					callback = ERR_SENHA_INCORRETA;
 				} else {
 					callback = "SUCCESS";
 				}
 			} else {
-				callback = "Associacao \""+login+"\" nao cadastrada no sistema";
+				callback = ERR_LOGIN_INCORRETO;
 			}
 			
 		} catch (SQLException e) {

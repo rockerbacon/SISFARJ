@@ -1,5 +1,7 @@
 package database;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,10 @@ public class MapperMocker extends Mapper {
 	
 	public MapperMocker (int numberOfMocks) {
 		this.numberOfMocks = numberOfMocks;
+	}
+	
+	public static interface Script {
+		public Object mock();
 	}
 
 	@Override
@@ -24,10 +30,26 @@ public class MapperMocker extends Mapper {
 	}
 	
 	@Override
-	public <Type> List<Type> read(int maxRows, Class<Type> factory, Filter... filters) {
+	public <Type> List<Type> read(int maxRows, Class<Type> factory, Filter... filters) throws IllegalArgumentException {
+		Constructor<Type> constr;
+		if (!Script.class.isAssignableFrom(factory)) {
+			throw new IllegalArgumentException("Cannot mock object of type "+factory.getName()+" since it does not implement MapperMocker.Script");
+		}
 		ArrayList<Type> list = new ArrayList<Type>(numberOfMocks);
-		for (int i = 0; i < numberOfMocks; i++) {
-			list.add(null);
+		try {
+			constr = factory.getConstructor();
+			Script mockFactory = (Script)constr.newInstance();
+			for (int i = 0; i < numberOfMocks; i++) {
+				@SuppressWarnings("unchecked")	//checado em catch de ClassCastException
+				Type obj = (Type)mockFactory.mock();
+				list.add(obj);
+			}
+		} catch (NoSuchMethodException|InvocationTargetException|InstantiationException|IllegalAccessException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Class "+factory.getName()+" must implement an accessible explicit default constructor in order to be mapped");
+		} catch (ClassCastException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Mismatch in type Script implementation in "+factory.getName());
 		}
 		return list;
 	}

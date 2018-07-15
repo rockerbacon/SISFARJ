@@ -12,7 +12,7 @@ import domain.Associacao;
 import java.sql.Connection;
 
 @Mapper.UseTables({AssociacaoScript.TABLE_NAME})
-public class AssociacaoScript implements Mapper.Script<Associacao> {
+public class AssociacaoScript implements Mapper.Script<Associacao>, MapperMocker.Script {
 
 	public static final String TABLE_NAME = "ASSOCIACAO";
 	
@@ -37,6 +37,46 @@ public class AssociacaoScript implements Mapper.Script<Associacao> {
 	
 	public AssociacaoScript () {}
 	
+	public static String getTableName() {
+		return TABLE_NAME;
+	}
+
+	public int getAsso_matricula() {
+		return asso_matricula;
+	}
+
+	public String getAsso_nome() {
+		return asso_nome;
+	}
+
+	public String getAsso_sigla() {
+		return asso_sigla;
+	}
+
+	public String getAsso_endereco() {
+		return asso_endereco;
+	}
+
+	public int getAsso_telefone() {
+		return asso_telefone;
+	}
+
+	public int getAsso_oficio() {
+		return asso_oficio;
+	}
+
+	public Date getAsso_data() {
+		return asso_data;
+	}
+
+	public String getAsso_senha() {
+		return asso_senha;
+	}
+
+	public int getAsso_comprovante_pagamento() {
+		return asso_comprovante_pagamento;
+	}
+
 	public static List<Associacao> listar() throws SQLException, IOException {
 		Connection con = DbConnection.connect();
 		Mapper mapper = new Mapper(con);
@@ -54,28 +94,32 @@ public class AssociacaoScript implements Mapper.Script<Associacao> {
 	}
 	
 	@Override
-	public Associacao mapTo(Associacao object) {
-	
-		if (object != null) {
-			object.set_data(asso_data);
-			object.set_endereco(asso_endereco);
-			object.set_matricula(asso_matricula);
-			object.set_nome(asso_nome);
-			object.set_oficio(asso_oficio);
-			object.set_sigla(asso_sigla);
-			object.set_telefone(asso_telefone);
-			object.set_senha(asso_senha);
-			object.set_comprovante_pagamento(asso_comprovante_pagamento);
-		} else {
-			try {
-				//Mock object
-				SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-				object = new Associacao("mock", "moc", "caso de teste", 123456, 123456, dt.parse("01/01/2018"));
-				object.set_matricula(0);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+	public Object mock () {
+		AssociacaoScript object = null;
+		try {
+			//Mock object
+			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+			object = new AssociacaoScript().mapFrom(new Associacao("mock", "mck", "caso de teste", 123456, 123456, dt.parse("01/01/2018")));
+			object.asso_matricula = 0;
+			object.asso_senha = "password";
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		return object;
+	}
+	
+	@Override
+	public Associacao mapTo(Associacao object) {
+
+		object.set_data(asso_data);
+		object.set_endereco(asso_endereco);
+		object.set_matricula(asso_matricula);
+		object.set_nome(asso_nome);
+		object.set_oficio(asso_oficio);
+		object.set_sigla(asso_sigla);
+		object.set_telefone(asso_telefone);
+		object.set_senha(asso_senha);
+		object.set_comprovante_pagamento(asso_comprovante_pagamento);
 	
 		return object;
 	}
