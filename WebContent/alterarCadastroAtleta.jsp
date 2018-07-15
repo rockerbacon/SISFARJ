@@ -21,7 +21,7 @@
 		</div>
 		<div class="form-group">
 			<label for="dataEntrada">data entrada</label>
-			<input type="text" class="form-control" name="atleta_associacao_entrada" id="entradaData" value="<%=request.getSession().getAttribute("atleta_associacao_data")%>"/>
+			<input type="text" class="form-control" name="atleta_associacao_data" id="entradaData" value="<%=request.getSession().getAttribute("atleta_associacao_data")%>"/>
 		</div>
 		<div class="form-group">
 			<label for="numeroAtleta">Número</label>

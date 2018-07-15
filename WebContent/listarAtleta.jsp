@@ -54,8 +54,8 @@
 						<%request.getSession().setAttribute("atleta_associacao_data", atleta.get_associacao_data()); %>
 						<%request.getSession().setAttribute("atleta_nascimento_data", atleta.get_nascimento_data()); %>
 						<%request.getSession().setAttribute("atleta_matricula", atleta.get_matricula()); %>						
-						<%request.getSession().setAttribute("comprovante_pagamento", atleta.get_comprovante_pagamento()); %>						
 						<%request.getSession().setAttribute("matricula_associacao", atleta.get_asso_matricula()); %>							    
+						<%request.getSession().setAttribute("comprovante_pagamento", atleta.get_comprovante_pagamento()); %>						
 	    				${button}
 	    			</form>
 	    		</td>
