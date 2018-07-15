@@ -10,7 +10,7 @@ public class Competicao {
 	Date comp_data;
 	
 	@Mapper.PrimaryKey
-	@Mapper.ForeignKey(references=Local.TABLE_NAME)
+	@Mapper.ForeignKey(references=LocalScript.TABLE_NAME)
 	String loca_nome;
 	
 	//@Mapper.PrimaryKey

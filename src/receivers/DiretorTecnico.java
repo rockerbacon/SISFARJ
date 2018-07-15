@@ -5,13 +5,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 import database.AssociacaoScript;
-import database.Local;
+import database.LocalScript;
 import database.Mapper;
 
 import java.sql.SQLException;
 
 import database.DbConnection;
-import database.Local;
+import database.LocalScript;
 import database.Mapper;
 
 
@@ -36,7 +36,7 @@ public class DiretorTecnico extends Secretario {
 //				mapper.create(local2);
 //			}
 			
-			Local local = new Local(nome_local, endereco_local, (short)piscinas_disponiveis);
+			LocalScript local = new LocalScript(nome_local, endereco_local, (short)piscinas_disponiveis);
 			mapper.create(local);
 			
 			
@@ -61,7 +61,7 @@ public class DiretorTecnico extends Secretario {
 		String callback = null;
 		try {
 			
-			Local local = new Local(nome_local, endereco_local, (short)piscinas_disponiveis);
+			LocalScript local = new LocalScript(nome_local, endereco_local, (short)piscinas_disponiveis);
 			
 			Mapper mapper = new Mapper(con);
 			

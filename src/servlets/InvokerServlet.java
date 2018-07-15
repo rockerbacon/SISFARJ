@@ -60,9 +60,6 @@ public class InvokerServlet extends HttpServlet {
 						cmd = new FiliarAssociacaoCommand(mapper, numeroOficio, dataOficio, nomeAssociacao, siglaAssociacao, endereco, tel, comprovantePagamento);
 					}
 					break;
-					case "ALTERAR FILIACAO":
-						//cmd =  new AlterarFiliacaoCommand((int)args[++argc], (String)args[++argc], (String)args[++argc], (String)args[++argc], (int)args[++argc], (int)args[++argc], (Date)args[++argc]);
-					break;
 					case "IDENTIFICAR USUARIO":
 					{
 						String login = pc.getString("login");
@@ -106,9 +103,27 @@ public class InvokerServlet extends HttpServlet {
 						cmd = new CadastrarAtletaCommand(mapper, numero, data_oficio, nome, data_nascimento, data_entrada, matricula_atleta, categoria, comprovante_pagamento);
 					}
 					break;
+					case "INCLUIR LOCAIS DE COMPETICAO":
+					{
+						String nome_local = pc.getString("loca_nome");
+						String endereco_local = pc.getString("loca_endereco");
+						short loca_piscinas = (short)pc.getInt("piscinasDisponiveis");
+						
+						cmd = new IncluirLocaisCompeticaoCommand(mapper, nome_local, endereco_local, loca_piscinas);
+					}
+					break;
+					case "ALTERAR LOCAIS DE COMPETICAO":
+					{
+						String loca_nome = pc.getString("loca_nome");
+						String loca_endereco = pc.getString("loca_endereco");
+						short loca_piscinas = (short)pc.getInt("piscinasDisponiveis");
+						String old_nome = pc.getSessionString("loca_nome");
+						
+						cmd = new AlterarLocaisCompeticaoCommand(mapper, old_nome, loca_nome, loca_endereco, loca_piscinas);
+					}
+					break;
 					default:
 						errMsg = "Nao foi possivel encontrar command "+cmdName;
-						throw new IllegalArgumentException("Command "+cmdName+" does not exist");
 				}
 			}
 			
@@ -123,8 +138,10 @@ public class InvokerServlet extends HttpServlet {
 			}
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			errMsg = "Erro ao conectar ao banco de dados";
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			errMsg = e.getMessage();
 		} finally {
 			try {

@@ -15,7 +15,7 @@
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Alterar Locais de Competição</h4>
 	<form action="InvokerServlet" method="POST">
-		<input type="hidden" name="command" value="AlterarLocaisCompeticaoCommand"/>
+		<input type="hidden" name="command" value="Alterar locais de competicao"/>
 		
 		<div class="form-group">
 			<label for="NomeLocal">Nome</label>

@@ -41,8 +41,9 @@ public class AlterarFiliacaoCommand implements Command {
 			Associacao asso = new Associacao(this.asso_nome, this.asso_sigla, this.asso_endereco, this.asso_telefone, this.asso_oficio, this.asso_data);
 			asso.set_matricula(this.asso_matricula);
 			asso.set_senha(this.asso_senha);
+			AssociacaoScript mapperScript = new AssociacaoScript().mapFrom(asso);
 			
-			mapper.update(new AssociacaoScript().mapFrom(asso));
+			mapper.update(mapperScript, mapperScript);
 			callback = "SUCCESS Associacao alterada com sucesso";
 		} catch (SQLException e) {
 			e.printStackTrace();

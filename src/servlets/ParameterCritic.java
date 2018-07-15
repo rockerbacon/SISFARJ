@@ -14,6 +14,14 @@ public class ParameterCritic {
 		this.request = request;
 	}
 	
+	public String getSessionString (String id) throws IllegalArgumentException {
+		String str = (String)request.getSession().getAttribute(id);
+		if (str == null || str.isEmpty()) {
+			throw new IllegalArgumentException("Todos os campos devem estar preenchidos");
+		}
+		return str;
+	}
+	
 	public String getString (String id) throws IllegalArgumentException{
 		String str = request.getParameter(id);
 		if (str == null || str.isEmpty()) {

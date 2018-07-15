@@ -57,7 +57,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.create(Local.class);
+			mapper.create(LocalScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -88,7 +88,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.delete(Local.class);
+			mapper.delete(LocalScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}

@@ -14,14 +14,14 @@
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Incluir locais de competição</h4>
 	<form action = "InvokerServlet" method ="post">
-		<input type="hidden" name="command" value="IncluirLocaisCompeticaoCommand"/>
+		<input type="hidden" name="command" value="Incluir locais de competicao"/>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Nome</label>
-			<input type="text" class="form-control" name="nomeCompeticao" id="nomeCompeticao" placeholder="Nome">
+			<input type="text" class="form-control" name="loca_nome" id="nomeCompeticao" placeholder="Nome">
 		</div>		
 		<div class="form-group">
 			<label for="exampleInputEmail1">Endereço</label>
-			<input type="text" class="form-control" name="enderecoCompeticao" id="enderecoCompeticao" placeholder="Endereço">
+			<input type="text" class="form-control" name="loca_endereco" id="enderecoCompeticao" placeholder="Endereço">
 		</div>
 		<div class="form-group">
 			<label>Piscina(s)</label>
