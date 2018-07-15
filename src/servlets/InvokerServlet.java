@@ -48,6 +48,7 @@ public class InvokerServlet extends HttpServlet {
 				Mapper mapper = new Mapper(con);
 				switch (cmdName.toUpperCase()) {
 					case "FILIAR ASSOCIACAO":
+					{
 						int numeroOficio = pc.getInt("nOficio");
 						Date dataOficio = pc.getDate("dataOficio", "dd/MM/yyyy");
 						String nomeAssociacao = pc.getString("nomeAssoc");
@@ -57,11 +58,13 @@ public class InvokerServlet extends HttpServlet {
 						int comprovantePagamento = pc.getInt("numComprovantePag");
 						
 						cmd = new FiliarAssociacaoCommand(mapper, numeroOficio, dataOficio, nomeAssociacao, siglaAssociacao, endereco, tel, comprovantePagamento);
+					}
 					break;
 					case "ALTERAR FILIACAO":
 						//cmd =  new AlterarFiliacaoCommand((int)args[++argc], (String)args[++argc], (String)args[++argc], (String)args[++argc], (int)args[++argc], (int)args[++argc], (Date)args[++argc]);
 					break;
 					case "IDENTIFICAR USUARIO":
+					{
 						String login = pc.getString("login");
 						String senha = pc.getString("senha");
 						cmd = new IdentificarUsuarioCommand(mapper, login, senha);
@@ -72,6 +75,22 @@ public class InvokerServlet extends HttpServlet {
 						} else {
 							errMsg = callback;
 						}
+					}
+					break;
+					case "ALTERAR FILIACAO DE ASSOCIACAO":
+					{
+						int matricula = pc.getInt("asso_matricula");
+						String nome = pc.getString("asso_nome");
+						String sigla = pc.getString("asso_sigla");
+						String endereco = pc.getString("asso_endereco");
+						int tel = pc.getInt("asso_telefone");
+						int oficio = pc.getInt("asso_oficio");
+						Date data = pc.getDate("asso_data", "dd/MM/yyyy");
+						String senha = pc.getString("asso_senha");
+						
+						cmd = new AlterarFiliacaoCommand(mapper, matricula, nome, sigla, endereco, tel, oficio, data, senha);
+					}
+						
 					break;
 					default:
 						errMsg = "Nao foi possivel encontrar command "+cmdName;

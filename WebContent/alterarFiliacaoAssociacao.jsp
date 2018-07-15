@@ -15,7 +15,8 @@
 <div class="container" style="margin-top: 30px;">	
 	<h4 class="mb-3">SISFARJ - Filiar associação</h4>
 	<form action="InvokerServlet" method="POST">
-		<input type="hidden" name="command" value="AlterarFiliacaoCommand"/>
+		<input type="hidden" name="command" value="Alterar Filiacao de Associacao"/>
+		<input type="hidden" name="paginaRedirecionamento" value="alterarFiliacaoAssociacao.jsp"/>
 		
 		<input type="hidden" name="asso_matricula" value="<%=request.getSession().getAttribute("asso_matricula")%>"/>
 		<div class="form-group">
@@ -39,6 +40,7 @@
 			<label for="Data">Data Ofício</label>
 			<input type="text" class="form-control" name="asso_data" id="dataOficio" value="<%=request.getSession().getAttribute("asso_data")%>"/>
 		</div>
+		<input type="hidden" name="asso_senha" value="<%=request.getSession().getAttribute("asso_senha") %>"/>
 
 		<button type="submit" class="btn btn-primary">Alterar</button>
 	</form>

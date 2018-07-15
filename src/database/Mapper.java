@@ -162,7 +162,7 @@ public class Mapper {
 			Iterator<Object> it = parameters.iterator();
 			while (it.hasNext()) {
 				Object obj= it.next();
-				if (obj.getClass().equals(Date.class))					
+				if (obj != null && obj.getClass().equals(Date.class))				
 					statement.setObject(++i, obj, Types.TIMESTAMP);
 				else
 					statement.setObject(++i, obj);
@@ -562,6 +562,7 @@ public class Mapper {
 		Iterator<Field> it;
 		int i;
 		Field field;
+		Object param;
 		
 		if (tables.length != 1) {
 			throw new IllegalArgumentException("Object of Type "+objClass.getCanonicalName()+" must only use one table to be updated");	
@@ -599,6 +600,7 @@ public class Mapper {
 							query.append(",\n\t");
 							query.append(fields[i].getName());
 							query.append("=?");
+							param = fields[i].get(object);
 							params.add(fields[i].get(object));
 						}
 					}
