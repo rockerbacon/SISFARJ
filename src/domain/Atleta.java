@@ -28,7 +28,7 @@ public class Atleta {
 	public Atleta () {}
 
 
-	public Atleta( int atle_matricula, String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
+	public Atleta( String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
 			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula, int atle_comprovante_pagamento) {
 		super();
 		this.atle_matricula = atle_matricula;

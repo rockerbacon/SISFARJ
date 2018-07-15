@@ -77,7 +77,7 @@ public class AtletaScript implements Mapper.Script<Atleta>, MapperMocker.Script 
 		AtletaScript mockObj = null;
 		try {
 			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-			mockObj = new AtletaScript().mapFrom(new Atleta(666,"atleta", "m", 0, 0, dt.parse("01/01/2018"), dt.parse("01/01/2018"), dt.parse("01/01/2018"), 0,0 ));
+			mockObj = new AtletaScript().mapFrom(new Atleta("atleta", "m", 0, 0, dt.parse("01/01/2018"), dt.parse("01/01/2018"), dt.parse("01/01/2018"), 0,0 ));
 			mockObj.atle_comprovante_pagamento = 0;
 			
 		} catch (ParseException e) {

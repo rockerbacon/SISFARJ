@@ -49,7 +49,7 @@ public class SecretarioTest {
 	public void cadastrarAtleta () {
 		try {
 			SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-			Atleta atle = new Atleta("teste", "m", 0, 0, dt.parse("01/01/2018"), dt.parse("01/01/2018"), dt.parse("01/01/2018"), 0);
+			Atleta atle = new Atleta("teste", "m", 0, 0, dt.parse("01/01/2018"), dt.parse("01/01/2018"), dt.parse("01/01/2018"), 0, 0);
 			Mapper mapper = new MapperMocker(1);
 			
 			String callback = new CadastrarAtletaCommand(mapper, atle.get_numero(), atle.get_oficio_data(), atle.get_nome(), atle.get_nascimento_data(), atle.get_associacao_data(), atle.get_asso_matricula(), atle.get_categoria(), 0).execute();

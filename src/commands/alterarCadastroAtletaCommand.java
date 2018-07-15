@@ -53,7 +53,7 @@ public class alterarCadastroAtletaCommand implements Command{
 		public String execute() {
 			String callback = null;
 			try {
-				Atleta atleta = new Atleta( atleta_matricula, atleta_nome, atleta_categoria, atleta_numero, atleta_indice,
+				Atleta atleta = new Atleta( atleta_nome, atleta_categoria, atleta_numero, atleta_indice,
 						atleta_oficio_data, atleta_associacao_data, atleta_nascimento_data, matricula_associacao, comprovante_pagamento);
 				
 				mapper.update(new AtletaScript().mapFrom(atleta));
