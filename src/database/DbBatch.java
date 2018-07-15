@@ -62,7 +62,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.create(Competicao.class);
+			mapper.create(CompeticaoScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -83,7 +83,7 @@ public class DbBatch {
 			System.out.println(e.getMessage());
 		}
 		try {
-			mapper.delete(Competicao.class);
+			mapper.delete(CompeticaoScript.class);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}

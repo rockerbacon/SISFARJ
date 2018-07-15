@@ -13,10 +13,18 @@
 </nav>
 <div class="container" style="margin-top: 30px;">
 	<h4 class="mb-3">SISFARJ - Criar competição</h4>
-	<form>
+	<form action="opcoesCriarCompeticao.jsp">
+		<input type="hidden" name="button" value='<button type="sumbit">Selecionar</button>'/>
 		<div class="form-group">
-			<label for="exampleInputEmail1">Nome da competição</label>
-			<input type="text" class="form-control" name="nomeCompeticao" placeholder="Nome da competição">
+			<label for="exampleInputEmail1">Nome da Competição</label>
+			<input type="text" class="form-control" name="comp_nome" placeholder="Nome da competição">
+		</div>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Data da Competição</label>
+			<input type="text" class="form-control" name="comp_data" placeholder="Nome da competição">
+		</div>
+		<div>
+			<button type="submit">Proximo</button>
 		</div>
 	</form>
 </div>
