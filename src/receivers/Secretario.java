@@ -50,10 +50,10 @@ public class Secretario extends Pessoa {
 	}
 	
 	public String cadastrarAtleta (int numero, Date data_oficio, String nome, Date data_nascimento, Date data_entrada, 
-			int matricula_atleta, String categoria, int comprovante_pagamento) {
+			int matricula_atleta, String categoria, String comprovante_pagamento) {
 		String callback = null;
 		long atle_indice = 0;
-		Atleta atleta = new Atleta(nome, categoria, numero, atle_indice, data_oficio, data_entrada, data_nascimento, matricula_atleta);
+		Atleta atleta = new Atleta(nome, categoria, numero, atle_indice, data_oficio, data_entrada, matricula_atleta, data_nascimento, comprovante_pagamento);
 		//Usuario tecnico = new Usuario("tecnico_"+siglaAssociacao, (byte)1, String.format("%04d", new java.util.Random().nextInt(9999)));
 		
 		try {
@@ -97,12 +97,13 @@ public class Secretario extends Pessoa {
 		return callback;
 	}
 	
-	public String alterarCadastroAtleta(String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
-			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula) {
+	public String alterarCadastroAtleta(int atle_matricula,String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
+			Date atle_oficio_data, Date atle_associacao_data, int asso_matricula, Date atle_nascimento_data,  String comprovante_pagamento) {
 		String callback = null;
 		try {
 			Atleta atleta = new Atleta(atle_nome, atle_categoria, atle_numero, atle_indice, atle_oficio_data,
-					atle_associacao_data, atle_nascimento_data, asso_matricula);
+					atle_associacao_data, asso_matricula, atle_nascimento_data, comprovante_pagamento);
+			atleta.set_matricula(atle_matricula);
 			Mapper mapper = new Mapper(con);
 			
 			mapper.update(atleta);
