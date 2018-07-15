@@ -21,7 +21,6 @@
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarAssociacao.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<input type="hidden" name="button" value='<button type="submit">Alterar</button>'/>
 		<button  type="submit"> Alterar Filiacao Associacao</button>
 	</form>

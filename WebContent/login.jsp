@@ -10,7 +10,9 @@
 	<title>Login do usuário</title>
 </head>
 <body class="text-center">
-	<form class="form-signin" data-op-form-id="0" action = "CredentialsValidationServlet" method = "POST">
+	<form class="form-signin" data-op-form-id="0" action = "InvokerServlet" method = "POST">
+		<input type="hidden" name="command" value="Identificar Usuario"/>
+		<input type="hidden" name="paginaRedirecionamento" value="login.jsp"/>
 		
 		<h1 class="h3 mb-3 font-weight-normal">Login no SISFARJ</h1>
       
