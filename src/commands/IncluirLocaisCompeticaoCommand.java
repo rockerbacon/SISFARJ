@@ -15,8 +15,9 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 	
 	private String nome_competicao;
 	private String endereco_competicao;
-	private int piscina_25_metros;
-	private int piscina_50_metros;
+//	private int piscina_25_metros;
+//	private int piscina_50_metros;
+	private int loca_piscinas;
 	
 	private DiretorTecnico receiver;
 	
@@ -31,8 +32,9 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 		try {
 			this.nome_competicao = getRequest().getParameter("nomeCompeticao");
 			this.endereco_competicao = getRequest().getParameter("enderecoCompeticao");
-			this.piscina_25_metros = Integer.parseInt(getRequest().getParameter("piscina25metros"));//System.out.println(getRequest().getParameter("piscina25metros"));
-			this.piscina_50_metros = Integer.parseInt(getRequest().getParameter("piscina50metros"));
+//			this.piscina_25_metros = Integer.parseInt(getRequest().getParameter("piscina25metros"));//System.out.println(getRequest().getParameter("piscina25metros"));
+//			this.piscina_50_metros = Integer.parseInt(getRequest().getParameter("piscina50metros"));
+			this.loca_piscinas = Integer.parseInt(getRequest().getParameter("piscinasDisponiveis"));
 			this.con = DbConnection.connect();
 			this.receiver = new DiretorTecnico(con);
 			
@@ -43,11 +45,13 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 			
 			if(endereco_competicao.isEmpty()) {
 				errMsg = "O campo \"Endereço\" não foi preenchido corretamente!";
-			} else if (getRequest().getParameter("piscina25metros").isEmpty()) {
+			} else if(getRequest().getParameter("piscinasDisponiveis").isEmpty()){
+				errMsg = "O campo Piscina não foi preenchido corretamente!";
+			}/*else if (getRequest().getParameter("piscina25metros").isEmpty()) {
 				errMsg = "O campo \"Piscina 25 metros\" não foi preenchido corretamente!";
 			} else if (getRequest().getParameter("piscina50metros").isEmpty()) {
 				errMsg = "O campo \"Piscina 50 metros\" não foi preenchido corretamente!";
-			}
+			}*/
 			
 		}catch (NullPointerException e) {
 			errMsg = "Campo nao preenchido";
@@ -74,7 +78,7 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 		String credenciais = "";
 		String errMsg = null;
 		try {
-			callback = this.receiver.incluirLocalCompeticao(nome_competicao, endereco_competicao, piscina_25_metros, piscina_50_metros);
+			callback = this.receiver.incluirLocalCompeticao(nome_competicao, endereco_competicao, loca_piscinas);
 			if(callback.contains("SUCCESS")) {
 				credenciais = callback.substring(new String("SUCCESS ").length());
 				getRequest().setAttribute("successMsg", nome_competicao+" criada com sucesso\n"+credenciais);

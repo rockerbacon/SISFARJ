@@ -4,6 +4,7 @@
 <%@ page import="java.util.Date" %>  
 <%@ page import="java.util.List,java.util.Set" %>  
 <%@ page import="database.Local" %>  
+<%@ page import="java.util.Comparator" %>
 
 <html>
 <head>
@@ -25,13 +26,35 @@
 		</tr>
 		<%
 		List<Local> local = Local.listar();
+		local.sort(new Comparator<Local>(){ @Override public int compare(Local a, Local b){ return a.get_nome().compareTo(b.get_nome());} } );
 	
 		for(Local l:local){
 	    %>
 	    	<tr>
 		    	<td><%=l.get_nome()%></td>
 				<td><%=l.get_endereco()%></td>
-				<td><%=l.get_tam_pisc()%></td>
+				<td>
+				<%if(l.get_tam_pisc() == 75){
+					%>25 e 50
+				<%	
+				}else{
+					%><%=l.get_tam_pisc() %>
+				<%	
+				}
+				%>
+				</td>
+		    	<td>
+		    		<form action="trataSession.jsp"/>
+		    		<input type="hidden" name="proximaPagina" value="alterarLocaisDeCompeticao.jsp" />
+		    			<input type="hidden" name="loca_nome" value="<%=l.get_nome() %>"/>
+		    			<input type="hidden" name="loca_endereco" value="<%=l.get_endereco() %>"/>
+		    			<input type="hidden" name="piscinasDisponiveis" value="<%=l.get_tam_pisc() %>"/>
+		    			<%//request.getSession().setAttribute("loca_nome", l.get_nome()); %>
+		    			<%//request.getSession().setAttribute("loca_endereco", l.get_endereco()); %>
+		    			<%//request.getSession().setAttribute("piscinasDisponiveis", l.get_tam_pisc()); %>
+		    			${button}
+		    		</form>
+		    	</td>
 			</tr>
 	    <%
 	    }

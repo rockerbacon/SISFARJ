@@ -24,17 +24,11 @@
 			<input type="text" class="form-control" name="enderecoCompeticao" id="enderecoCompeticao" placeholder="Endereço">
 		</div>
 		<div class="form-group">
-			<label>Piscina de 25 metros</label>
-			<select class="form-control" name="piscina25metros">
-				<option value ="1">Sim</option>
-				<option value ="0">Não</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label>Piscina de 50 metros</label>
-			<select class="form-control" name="piscina50metros">
-				<option value="1">Sim</option>
-				<option value="0">Não</option>
+			<label>Piscina(s)</label>
+			<select class="form-control" name="piscinasDisponiveis">
+				<option value="25">25 metros</option>
+				<option value="50">50 metros</option>
+				<option value="75">25 e 50 metros</option>
 			</select>
 		</div>
 

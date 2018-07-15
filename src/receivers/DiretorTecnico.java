@@ -17,7 +17,7 @@ import database.Mapper;
 
 public class DiretorTecnico extends Secretario {
 	
-	public String incluirLocalCompeticao (String nome_competicao, String endereco_competicao, int piscina_25_metros, int piscina_50_metros) {
+	public String incluirLocalCompeticao (String nome_local, String endereco_local, int piscinas_disponiveis) {
 		String callback = null;
 		
 		
@@ -26,15 +26,18 @@ public class DiretorTecnico extends Secretario {
 			Mapper mapper = new Mapper(con);
 			
 			
-			if(piscina_25_metros == 1) {
-				Local local1 = new Local(nome_competicao , endereco_competicao, (short)25);
-				mapper.create(local1);
-				
-			}
-			if(piscina_50_metros == 1) {
-				Local local2 = new Local(nome_competicao , endereco_competicao, (short)50);
-				mapper.create(local2);
-			}
+//			if(piscina_25_metros == 1) {
+//				Local local1 = new Local(nome_competicao , endereco_competicao, (short)25);
+//				mapper.create(local1);
+//				
+//			}
+//			if(piscina_50_metros == 1) {
+//				Local local2 = new Local(nome_competicao , endereco_competicao, (short)50);
+//				mapper.create(local2);
+//			}
+			
+			Local local = new Local(nome_local, endereco_local, (short)piscinas_disponiveis);
+			mapper.create(local);
 			
 			
 			callback = "SUCCESS Local inserido";
@@ -52,6 +55,23 @@ public class DiretorTecnico extends Secretario {
 		}
 		
 		return callback;	
+	}
+	
+	public String alterarLocalCompeticao(String nome_local, String endereco_local, int piscinas_disponiveis) {
+		String callback = null;
+		try {
+			
+			Local local = new Local(nome_local, endereco_local, (short)piscinas_disponiveis);
+			
+			Mapper mapper = new Mapper(con);
+			
+			mapper.update(local);
+			callback = "SUCCESS";
+		} catch (SQLException e) {
+			e.printStackTrace();
+			callback = "Erro inesperado no servidor";
+		}
+		return callback;
 	}
 	
 

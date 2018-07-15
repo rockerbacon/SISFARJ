@@ -45,7 +45,13 @@
 		<button  type="submit"> Incluir locais de competição</button>
 	</form>
 	
-	<a href=""> Alterar locais de competição</a><br>
+	
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/listarLocaisDeCompeticao.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<input type="hidden" name="button" value='<button type="submit">Alterar</button>'/>
+		<button  type="submit"> Alterar locais de competição</button>
+	</form>
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarLocaisDeCompeticao.jsp"/>

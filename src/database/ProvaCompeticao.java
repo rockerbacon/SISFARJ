@@ -16,8 +16,8 @@ public class ProvaCompeticao {
 	String loca_nome;
 	
 	
-	@Mapper.PrimaryKey
-	@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
+	//@Mapper.PrimaryKey
+	//@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
 	short loca_tam_pisc;
 	
 	@Mapper.PrimaryKey
