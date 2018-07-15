@@ -14,7 +14,7 @@ public class Local {
 	
 	String loca_endereco;
 	
-	@Mapper.PrimaryKey
+	//@Mapper.PrimaryKey
 	short loca_tam_pisc;
 	
 	public Local() {}
