@@ -124,6 +124,8 @@ public class InvokerServlet extends HttpServlet {
 			
 		} catch (SQLException e) {
 			errMsg = "Erro ao conectar ao banco de dados";
+		} catch (IllegalArgumentException e) {
+			errMsg = e.getMessage();
 		} finally {
 			try {
 				if (con != null) con.close();

@@ -17,7 +17,7 @@ public class ParameterCritic {
 	public String getString (String id) throws IllegalArgumentException{
 		String str = request.getParameter(id);
 		if (str == null || str.isEmpty()) {
-			throw new IllegalArgumentException("Campo "+id+" vazio");
+			throw new IllegalArgumentException("Todos os campos devem estar preenchidos");
 		}
 		return str;
 	}
@@ -28,7 +28,7 @@ public class ParameterCritic {
 		try {
 			return Integer.parseInt(str);
 		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException(id+" nao contem um numero valido");
+			throw new IllegalArgumentException("Numero invalido passado em campo");
 		}
 	}
 	
@@ -38,7 +38,7 @@ public class ParameterCritic {
 		try {
 			return dt.parse(str);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException(id+" nao contem uma data valida");
+			throw new IllegalArgumentException("Data invalida passada em campo");
 		}
 	}
 	

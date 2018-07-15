@@ -35,7 +35,9 @@
 	    		<td><%=assoc.get_matricula()%></td>
 	    		<td><%=assoc.get_nome()%></td>
 	    		<td>
-	    			<form action="alterarFiliacaoAssociacao.jsp"/>
+	    			<form action="trataSession.jsp"/>
+	    				<input type="hidden" name="proximaPagina" value="alterarFiliacaoAssociacao.jsp"/>
+	    				
 	    				<input type="hidden" name="asso_matricula" value="<%=assoc.get_matricula()%>"/>
 	    				<input type="hidden" name="asso_nome" value="<%=assoc.get_nome() %>"/>
 	    				<input type="hidden" name="asso_sigla" value="<%=assoc.get_sigla() %>"/>
@@ -44,14 +46,6 @@
 	    				<input type="hidden" name="asso_oficio" value="<%=assoc.get_oficio() %>"/>
 	    				<input type="hidden" name="asso_data" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(assoc.get_data()) %>"/>
 	    				<input type="hidden" name="asso_data" value="<%=assoc.get_senha()%>"/>
-	    				<%request.getSession().setAttribute("asso_matricula", assoc.get_matricula()); %>
-						<%request.getSession().setAttribute("asso_nome", assoc.get_nome());%>
-						<%request.getSession().setAttribute("asso_sigla", assoc.get_sigla()); %>
-						<%request.getSession().setAttribute("asso_endereco", assoc.get_endereco()); %>
-						<%request.getSession().setAttribute("asso_telefone", assoc.get_telefone()); %>
-						<%request.getSession().setAttribute("asso_oficio", assoc.get_oficio()); %>
-						<%request.getSession().setAttribute("asso_data", new SimpleDateFormat("dd/MM/yyyy").format(assoc.get_data())); %>
-						<%request.getSession().setAttribute("asso_senha", assoc.get_senha()); %>
 	    				${button}
 	    			</form>
 	    		</td>

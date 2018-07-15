@@ -27,7 +27,7 @@
 			<label for="siglaAssoc">Sigla</label>
 			<input type="text" class="form-control" name="asso_sigla" id="siglaAssoc" value="<%=request.getSession().getAttribute("asso_sigla")%>"/>
 		</div>
-		<input type="hidden" name="asso_endereco" value="<%=request.getSession().getAttribute("asso_endereco")%>"/>
+		<input type="hidden" name="asso_endereco" value="<%=request.getSession().getAttribute("asso_endereco")%>" required/>
 		<div class="form-group">
 			<label for="telAssoc">Telefone</label>
 			<input type="text" class="form-control" name="asso_telefone" id="telAssoc" value="<%=request.getSession().getAttribute("asso_telefone")%>"/>
