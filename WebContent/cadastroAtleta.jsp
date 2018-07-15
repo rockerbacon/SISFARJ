@@ -22,7 +22,7 @@
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Data Ofício</label>
-			<input type="date" class="form-control" name="data_oficio" id="dataOficio" placeholder="Data Ofício">
+			<input type="text" class="form-control" name="data_oficio" id="dataOficio" placeholder="Data Ofício">
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Nome</label>
@@ -30,11 +30,11 @@
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Data de nascimento</label>
-			<input type="date" class="form-control" name="data_nascimento" id="dtNasc" placeholder="Data de nascimento">
+			<input type="text" class="form-control" name="data_nascimento" id="dtNasc" placeholder="Data de nascimento">
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Data de entrada</label>
-			<input type="date" class="form-control" name="data_entrada" id="dtEntrada" placeholder="Data de entrada">
+			<input type="text" class="form-control" name="data_entrada" id="dtEntrada" placeholder="Data de entrada">
 		</div>
 		<div class="form-group">
 			<label for="exampleInputEmail1">Matrícula da associacao</label>

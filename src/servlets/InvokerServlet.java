@@ -103,6 +103,23 @@ public class InvokerServlet extends HttpServlet {
 						cmd = new CadastrarAtletaCommand(mapper, numero, data_oficio, nome, data_nascimento, data_entrada, matricula_atleta, categoria, comprovante_pagamento);
 					}
 					break;
+					case "ALTERAR CADASTRO ATLETA":
+					{
+						int atleta_numero = pc.getInt("atleta_numero");;
+						Date atleta_oficio_data = pc.getDate("atleta_oficio_data", "dd/MM/yyyy");
+						String atleta_nome = pc.getString("atleta_nome");
+						Date atleta_nascimento_data = pc.getDate("atleta_nascimento_data", "dd/MM/yyyy");
+						Date atleta_associacao_data = pc.getDate("atleta_associacao_data", "dd/MM/yyyy");
+						int atleta_matricula = pc.getInt("atleta_matricula");
+						String atleta_categoria = pc.getString("atleta_categoria");
+						int comprovante_pagamento = pc.getInt("comprovante_pagamento");
+						int atleta_indice = pc.getInt("atleta_indice");
+						int matricula_associacao = pc.getInt("matricula_associacao");
+						
+						cmd = new alterarCadastroAtletaCommand (mapper, atleta_matricula, atleta_nome, atleta_categoria, atleta_numero, (long) atleta_indice, 
+								atleta_oficio_data, atleta_associacao_data, atleta_nascimento_data, matricula_associacao, comprovante_pagamento);
+					}
+					break;
 					case "INCLUIR LOCAIS DE COMPETICAO":
 					{
 						String nome_local = pc.getString("loca_nome");

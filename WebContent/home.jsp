@@ -34,7 +34,13 @@
 		<button  type="submit"> Cadastrar atleta</button>
 	</form>
 	
-	<a href=""> Alterar cadastro de atleta</a><br>
+	<form action="LoginRedirectServlet">
+		<input type="hidden" name="afterLogin" value="/listarAtleta.jsp"/>
+		<input type="hidden" name="accessLevel" value="0"/>
+		<input type="hidden" name="button" value='<button type="submit">Alterar</button>'/>
+		<button  type="submit"> Alterar cadastro Atleta</button>
+	</form>
+	
 	<a href=""> Transferir atleta</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>
 	<a href=""> Inscrever atleta em competição</a><br>

@@ -40,7 +40,7 @@ public class CadastrarAtletaCommand implements Command {
 	public String execute() {
 		String callback = null;
 		long atle_indice = 0;
-		Atleta atleta = new Atleta(nome, categoria, numero, atle_indice, data_oficio, data_entrada, data_nascimento, matricula_atleta);
+		Atleta atleta = new Atleta(matricula_atleta ,nome, categoria, numero, atle_indice, data_oficio, data_entrada, data_nascimento, matricula_atleta, comprovante_pagamento);
 		
 		try {
 			

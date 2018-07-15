@@ -21,15 +21,17 @@ public class Atleta {
 	Date atle_associacao_data;
 
 	Date atle_nascimento_data;
+	int atle_comprovante_pagamento;
 	
 	int asso_matricula;
 	
 	public Atleta () {}
 
 
-	public Atleta(String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
-			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula) {
+	public Atleta( int atle_matricula, String atle_nome, String atle_categoria, int atle_numero, long atle_indice,
+			Date atle_oficio_data, Date atle_associacao_data, Date atle_nascimento_data, int asso_matricula, int atle_comprovante_pagamento) {
 		super();
+		this.atle_matricula = atle_matricula;
 		this.atle_nome = atle_nome;
 		this.atle_categoria = atle_categoria;
 		this.atle_numero = atle_numero;
@@ -38,6 +40,17 @@ public class Atleta {
 		this.atle_associacao_data = atle_associacao_data;
 		this.atle_nascimento_data = atle_nascimento_data;
 		this.asso_matricula = asso_matricula;
+		this.atle_comprovante_pagamento = atle_comprovante_pagamento;
+	}
+
+
+	public int getAtle_comprovante_pagamento() {
+		return atle_comprovante_pagamento;
+	}
+
+
+	public void setAtle_comprovante_pagamento(int atle_comprovante_pagamento) {
+		this.atle_comprovante_pagamento = atle_comprovante_pagamento;
 	}
 
 
