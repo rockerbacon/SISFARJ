@@ -34,7 +34,7 @@
 	    		<td><%=atleta.get_numero()%></td>
 	    		<td><%=atleta.get_nome()%></td>
 	    		<td>
-	    			<form action="alterarCadastroAtleta"/>
+	    			<form action="alterarCadastroAtleta.jsp"/>
 	    				<input type="hidden" name="atleta_nome" value="<%=atleta.get_nome() %>"/>
 	    				<input type="hidden" name="atle_categoria" value="<%=atleta.get_categoria() %>"/>	    				
 	    				<input type="hidden" name="atleta_numero" value="<%=atleta.get_numero()%>"/>
@@ -43,6 +43,7 @@
 	    				<input type="hidden" name="data_entrada" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(atleta.get_associacao_data()) %>"/>
 	    				<input type="hidden" name="data_nascimento" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(atleta.get_nascimento_data()) %>"/>
 	    				<input type="hidden" name="atleta_matricula" value="<%=atleta.get_matricula() %>"/>
+	    				<input type="hidden" name="comprovante_pagamento" value="<%=atleta.get_comprovante_pagamento() %>"/>
 	    				<%request.getSession().setAttribute("atleta_nome", atleta.get_nome()); %>
 						<%request.getSession().setAttribute("atleta_categoria", atleta.get_categoria());%>	    				
 						<%request.getSession().setAttribute("atleta_numero", atleta.get_numero());%>

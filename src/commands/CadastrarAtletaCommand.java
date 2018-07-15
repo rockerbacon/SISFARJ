@@ -21,7 +21,8 @@ public class CadastrarAtletaCommand extends Command {
 	private Date data_entrada;
 	private int matricula_atleta;
 	private String categoria;
-	private int comprovante_pagamento;
+	private String comprovante_pagamento;
+	
 	
 	private Secretario receiver;
 	private Connection con;
@@ -49,7 +50,7 @@ public class CadastrarAtletaCommand extends Command {
 			this.matricula_atleta = Integer.parseInt(getRequest().getParameter("matricula_atleta"));
 			//System.out.println(this.matricula_atleta);
 			this.categoria = getRequest().getParameter("categoria");
-			this.comprovante_pagamento = Integer.parseInt(getRequest().getParameter("comprovante_pagamento"));
+			this.comprovante_pagamento = getRequest().getParameter("comprovante_pagamento");
 			//this.comprovante_pagamento = 10;
 			//System.out.println(this.comprovante_pagamento);
 			this.receiver = new Secretario(con);
