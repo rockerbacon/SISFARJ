@@ -14,18 +14,6 @@
 </nav>
 <form action="InvokerServlet" method="POST">
 		<input type="hidden" name="command" value="alterarCadastroAtletaCommand"/>
-		<input type="hidden" name="asso_matricula" value="<%=request.getSession().getAttribute("atle_matricula")%>"/>
-		<input type="hidden" name="atle_categoria" value="<%=request.getSession().getAttribute("atle_categoria") %>"/>	    				
-		<input type="hidden" name="atleta_indice" value="<%=request.getSession().getAttribute("atleta_indice")%>"/>
-		<input type="hidden" name="data_nascimento" value="<%=new SimpleDateFormat("dd/MM/yyyy").format(request.getSession().getAttribute("data_nascimento")) %>"/>
-		<input type="hidden" name="comprovante_pagamento" value="<%=request.getSession().getAttribute("comprovante_pagamento")%>"/>		
-		<input type="hidden" name="atle_matricula" value="<%=request.getSession().getAttribute("atleta_matricula")%>"/>
-		<%=request.getSession().getAttribute("atle_matricula")%>
-		<%=request.getSession().getAttribute("atle_categoria") %>
-		<%=request.getSession().getAttribute("atleta_indice")%>
-		<%=request.getSession().getAttribute("comprovante_pagamento")%>
-		<%=new SimpleDateFormat("dd/MM/yyyy").format(request.getSession().getAttribute("data_nascimento")) %>
-		<%=request.getSession().getAttribute("atle_matricula")%>
 		
 		<div class="form-group">
 			<label for="nomeAtleta">Nome</label>
@@ -33,7 +21,7 @@
 		</div>
 		<div class="form-group">
 			<label for="dataEntrada">data entrada</label>
-			<input type="text" class="form-control" name="data_entrada" id="entradaData" value="<%=request.getSession().getAttribute("data_entrada")%>"/>
+			<input type="text" class="form-control" name="atleta_associacao_entrada" id="entradaData" value="<%=request.getSession().getAttribute("atleta_associacao_data")%>"/>
 		</div>
 		<div class="form-group">
 			<label for="numeroAtleta">Número</label>
@@ -41,8 +29,27 @@
 		</div>
 		<div class="form-group">
 			<label for="dataOficio">data oficio</label>
-			<input type="text" class="form-control" name="data_oficio" id="dataOficio" value="<%=request.getSession().getAttribute("data_oficio")%>"/>
+			<input type="text" class="form-control" name="atleta_oficio_data" id="dataOficio" value="<%=request.getSession().getAttribute("atleta_oficio_data")%>"/>
 		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="atleta_nascimento_data" id="atletaNascimento" value="<%=request.getSession().getAttribute("atleta_nascimento_data")%>"/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="atleta_matricula" id="atletaMatricula" value="<%=request.getSession().getAttribute("atleta_matricula")%>"/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="atleta_indice" id="atletaIndice" value="<%=request.getSession().getAttribute("atleta_indice")%>"/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="matricula_associacao" id="matriculaAssociacao" value="<%=request.getSession().getAttribute("matricula_associacao")%>"/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="atleta_categoria" id="atletaCategoria" value="<%=request.getSession().getAttribute("atleta_categoria")%>"/>
+		</div>
+		<div class="form-group">
+			<input type="hidden" class="form-control" name="comprovante_pagamento" id="comprovantePagamento" value="<%=request.getSession().getAttribute("comprovante_pagamento")%>"/>
+		</div>
+		
 		<button type="submit" class="btn btn-primary">Alterar</button>
 	</form>
 

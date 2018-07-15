@@ -14,15 +14,15 @@ import receivers.Secretario;
 
 public class alterarCadastroAtletaCommand extends Command{
 		private Connection con;
-		private int atle_matricula;
-		private String atle_nome;
-		private String atle_categoria;
-		private int atle_numero; 
+		private int atleta_matricula;
+		private String atleta_nome;
+		private String atleta_categoria;
+		private int atleta_numero; 
 		private long atleta_indice;
-		private Date atle_oficio_data;
-		private Date atle_associacao_data;
-		private Date dataNasc;
-		private int asso_matricula;
+		private Date atleta_oficio_data;
+		private Date atleta_associacao_data;
+		private Date atleta_nascimento_data;
+		private int matricula_associacao;
 		private String comprovante_pagamento;
 		
 		
@@ -36,25 +36,20 @@ public class alterarCadastroAtletaCommand extends Command{
 			String errMsg = null;
 			try {
 				SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
-				String dataAss;
-				String dataOf;
-				String dataNasc;
+
 				
 				con = DbConnection.connect();
-				this.atle_matricula = Integer.parseInt(getRequest().getParameter("atle_matricula"));
-				this.atle_nome = getRequest().getParameter("nome");
-				dataAss = getRequest().getParameter("atle_associacao_data");
-				this.atle_associacao_data = dt.parse(dataAss);
-				this.atle_numero = Integer.parseInt(getRequest().getParameter("numero"));				
-				dataOf = getRequest().getParameter("atle_associacao_data");
-				this.atle_oficio_data = dt.parse(dataOf);
-				this.atle_nome = getRequest().getParameter("atle_categoria");
-				this.atle_nome = getRequest().getParameter("atleta_indice");
-				this.atle_nome = getRequest().getParameter("atleta_indice");
-				dataNasc = getRequest().getParameter("data_nascimento");
-				this.dataNasc = dt.parse(dataNasc);
+				this.atleta_matricula = Integer.parseInt(getRequest().getParameter("atleta_matricula"));
+				this.atleta_nome = getRequest().getParameter("atleta_nome");
+				this.atleta_associacao_data = dt.parse(getRequest().getParameter("atleta_associacao_data"));
+				this.atleta_numero = Integer.parseInt(getRequest().getParameter("atleta_numero"));				
+				this.atleta_oficio_data = dt.parse(getRequest().getParameter("atleta_oficio_data"));
+				this.atleta_categoria = getRequest().getParameter("atleta_categoria");
+				this.atleta_indice = Long.parseLong(getRequest().getParameter("atleta_indice"));
+				this.matricula_associacao = Integer.parseInt(getRequest().getParameter("matricula_associacao"));
+				this.atleta_nascimento_data = dt.parse(getRequest().getParameter("atleta_nascimento_data"));
 				this.comprovante_pagamento = getRequest().getParameter("comprovante_pagamento");
-				
+								
 			
 				this.receiver = new Secretario(con);
 				
@@ -85,8 +80,8 @@ public class alterarCadastroAtletaCommand extends Command{
 		String callback = null;
 		String errMsg = null;
 		try {
-			if ( (callback = this.receiver.alterarCadastroAtleta(atle_matricula, atle_nome, atle_categoria, atle_numero, atleta_indice, atle_oficio_data,
-					atle_associacao_data, asso_matricula, dataNasc, comprovante_pagamento)).equals("SUCCESS") ) {
+			if ( (callback = this.receiver.alterarCadastroAtleta( atleta_matricula, atleta_nome,  atleta_categoria,  atleta_numero,  atleta_indice,
+					 atleta_oficio_data,  atleta_associacao_data, matricula_associacao,  atleta_nascimento_data,   comprovante_pagamento)).equals("SUCCESS") ) {
 				getRequest().setAttribute("successMsg", "Atleta alterada com sucesso");
 				getRequest().getRequestDispatcher("/sucesso.jsp").forward(getRequest(), getResponse());
 			} else {
