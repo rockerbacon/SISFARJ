@@ -46,7 +46,7 @@ public class IncluirLocaisCompeticaoCommand extends Command {
 			if(endereco_competicao.isEmpty()) {
 				errMsg = "O campo \"Endereço\" não foi preenchido corretamente!";
 			} else if(getRequest().getParameter("piscinasDisponiveis").isEmpty()){
-				
+				errMsg = "O campo Piscina não foi preenchido corretamente!";
 			}/*else if (getRequest().getParameter("piscina25metros").isEmpty()) {
 				errMsg = "O campo \"Piscina 25 metros\" não foi preenchido corretamente!";
 			} else if (getRequest().getParameter("piscina50metros").isEmpty()) {
