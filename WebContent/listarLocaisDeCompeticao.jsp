@@ -45,7 +45,7 @@
 				</td>
 		    	<td>
 		    		<form action="trataSession.jsp"/>
-		    			<input type="hidden" name="proximaPagina" value="alterarLocaisDeCompeticao" />
+		    			<input type="hidden" name="proximaPagina" value="alterarLocaisDeCompeticao.jsp" />
 		    			<input type="hidden" name="loca_nome" value="<%=l.get_nome() %>"/>
 		    			<input type="hidden" name="loca_endereco" value="<%=l.get_endereco() %>"/>
 		    			<input type="hidden" name="piscinasDisponiveis" value="<%=l.get_tam_pisc() %>"/>
