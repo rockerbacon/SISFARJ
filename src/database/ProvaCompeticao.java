@@ -8,11 +8,11 @@ public class ProvaCompeticao {
 	public static final String TABLE_NAME = "PROVA_COMPETICAO";
 	
 	@Mapper.PrimaryKey
-	@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
+	@Mapper.ForeignKey(references=CompeticaoScript.TABLE_NAME)
 	Date comp_data;
 	
 	@Mapper.PrimaryKey
-	@Mapper.ForeignKey(references=Competicao.TABLE_NAME)
+	@Mapper.ForeignKey(references=CompeticaoScript.TABLE_NAME)
 	String loca_nome;
 	
 	

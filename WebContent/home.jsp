@@ -54,7 +54,6 @@
 	
 	<form action="LoginRedirectServlet">
 		<input type="hidden" name="afterLogin" value="/listarLocaisDeCompeticao.jsp"/>
-		<input type="hidden" name="accessLevel" value="0"/>
 		<input type="hidden" name="button" value='<button type="submit">Alterar</button>'/>
 		<button  type="submit"> Alterar locais de competição</button>
 	</form>
@@ -64,7 +63,10 @@
 		<button  type="submit"> Listar locais de competiçao</button>
 	</form>
 	
-	<a href=""> Criar competição</a><br>
+	<form action="LoginRedirectServlet"/>
+		<input type="hidden" name="afterLogin" value="/criarCompeticao.jsp"/>
+		<button type="submit">Criar Competicao</button>
+	</form>
 	<a href=""> Alterar competição</a><br>
 	<a href=""> Inserir resultado do atleta</a><br>
 	<a href=""> Listar competição</a><br>

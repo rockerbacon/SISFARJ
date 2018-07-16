@@ -2,8 +2,8 @@ package database;
 
 import java.util.Date;
 
-@Mapper.UseTables({Competicao.TABLE_NAME})
-public class Competicao {
+@Mapper.UseTables({CompeticaoScript.TABLE_NAME})
+public class CompeticaoScript {
 	public static final String TABLE_NAME = "COMPETICAO";
 	
 	@Mapper.PrimaryKey
@@ -13,15 +13,13 @@ public class Competicao {
 	@Mapper.ForeignKey(references=LocalScript.TABLE_NAME)
 	String loca_nome;
 	
-	//@Mapper.PrimaryKey
-	//@Mapper.ForeignKey(references=Local.TABLE_NAME)
 	short loca_tam_pisc;
 	
 	String comp_nome;
 	
-	public Competicao() {}
+	public CompeticaoScript() {}
 
-	public Competicao(Date comp_data, String loca_nome, String comp_nome) {
+	public CompeticaoScript(Date comp_data, String loca_nome, String comp_nome) {
 		super();
 		this.comp_data = comp_data;
 		this.loca_nome = loca_nome;
